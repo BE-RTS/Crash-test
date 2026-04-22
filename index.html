@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Crashtests - RTS CHAPUIS</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f3;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6b6b68;
+  --border: rgba(0,0,0,0.12);
+  --border-md: rgba(0,0,0,0.22);
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #1c1c1c;
+    --bg-secondary: #252525;
+    --text-primary: #f0f0ee;
+    --text-secondary: #999994;
+    --border: rgba(255,255,255,0.1);
+    --border-md: rgba(255,255,255,0.2);
+  }
+}
+body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-secondary); color: var(--text-primary); min-height: 100vh; padding: 2rem 1rem; }
+h1 { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+.subtitle { font-size: 13px; color: #73726c; margin-bottom: 20px; }
+
+/* KPI */
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+.kpi { background: var(--bg-primary); border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: 12px 14px; }
+.kpi-label { font-size: 11px; color: #73726c; margin-bottom: 4px; }
+.kpi-value { font-size: 22px; font-weight: 500; }
+.kpi-sub { font-size: 11px; color: #9c9a92; margin-top: 2px; }
+
+/* Axes matrix */
+.section-title { font-size: 11px; font-weight: 500; color: #73726c; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+.axes-matrix { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+.axis-card { background: var(--bg-primary); border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: 12px 14px; }
+.axis-name { font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+.axis-tries { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+.try-dot { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; cursor: default; }
+.dot-ok   { background: #d4edda; color: #1a6b35; }
+.dot-fail { background: #fdd; color: #a32d2d; }
+.dot-plan { background: #eceae3; color: #73726c; border: 0.5px solid #b4b2a9; }
+.axis-result { font-size: 11px; color: #9c9a92; }
+
+/* Campaigns */
+.campaign { background: var(--bg-primary); border: 0.5px solid var(--border); border-radius: var(--radius-md); margin-bottom: 10px; overflow: hidden; }
+.campaign-header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; user-select: none; }
+.campaign-header:hover { background: var(--bg-secondary); }
+.camp-date { font-size: 12px; color: #9c9a92; min-width: 120px; }
+.camp-name { font-size: 14px; font-weight: 500; flex: 1; }
+.camp-badge { font-size: 11px; padding: 3px 10px; border-radius: 99px; font-weight: 500; }
+.badge-fail    { background: #fdd; color: #a32d2d; }
+.badge-partial { background: #fff3cd; color: #856404; }
+.badge-ok      { background: #d4edda; color: #1a6b35; }
+.badge-planned { background: #eceae3; color: #73726c; border: 0.5px solid #b4b2a9; }
+.chevron { font-size: 10px; color: #9c9a92; transition: transform 0.2s; display: inline-block; }
+.chevron.open { transform: rotate(90deg); }
+
+.campaign-body { display: none; padding: 0 16px 16px; border-top: 0.5px solid var(--border); }
+.campaign-body.open { display: block; }
+
+.camp-reason { font-size: 13px; color: #5f5e5a; padding: 10px 0 12px; border-bottom: 0.5px solid var(--border); margin-bottom: 12px; }
+.camp-reason strong { color: var(--text-secondary); }
+
+.tirs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+.tir { border-radius: 8px; border: 0.5px solid var(--border); padding: 10px 12px; text-align: center; }
+.tir-label { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+.tir-desc  { font-size: 10px; color: #9c9a92; margin-bottom: 6px; }
+.tir-status { font-size: 10px; padding: 2px 8px; border-radius: 99px; display: inline-block; }
+.ts-ok      { background: #d4edda; color: #1a6b35; }
+.ts-fail    { background: #fdd; color: #a32d2d; }
+.ts-na      { background: #eceae3; color: #9c9a92; }
+.ts-planned { background: #eceae3; color: #5f5e5a; }
+
+/* Tab buttons */
+.tab-row { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+.tab-btn { font-size: 11px; padding: 4px 12px; border-radius: 99px; border: 0.5px solid var(--border); background: transparent; color: #73726c; cursor: pointer; }
+.tab-btn.active { background: var(--bg-primary); color: var(--text-primary); border-color: var(--border); }
+
+/* Charts */
+.charts-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.meta-chip { background: var(--bg-secondary); border-radius: 8px; padding: 4px 10px; font-size: 11px; color: var(--text-secondary); }
+.meta-chip strong { color: var(--text-primary); font-weight: 500; }
+.charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.chart-card { background: var(--bg-secondary); border-radius: 8px; padding: 10px 12px; }
+.chart-title { font-size: 11px; font-weight: 500; color: var(--text-secondary); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.ct-fail { font-size: 10px; padding: 1px 6px; background: #fdd; color: #a32d2d; border-radius: 99px; }
+.ct-ok   { font-size: 10px; padding: 1px 6px; background: #d4edda; color: #1a6b35; border-radius: 99px; }
+
+.obs-box    { margin-top: 10px; background: #fdd; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #a32d2d; }
+.obs-box-ok { margin-top: 10px; background: #d4edda; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #1a6b35; }
+
+.upload-zone { border: 0.5px dashed #b4b2a9; border-radius: 8px; padding: 16px; text-align: center; color: #9c9a92; font-size: 12px; margin-top: 12px; cursor: pointer; }
+.upload-zone:hover { background: #eceae3; }
+
+/* Legend */
+.legend { display: flex; gap: 14px; align-items: center; margin-bottom: 6px; font-size: 10px; color: #73726c; }
+.leg-line { width: 20px; height: 2px; display: inline-block; }
+</style>
+</head>
+<body>
+
+<h1>Dashboard - Campagnes de crashtests</h1>
+<p class="subtitle">CABRI2 + EpiShuttle · NF EN 1789+A2:2014 · RTS CHAPUIS / UTAC · Mis à jour avril 2026</p>
+
+<div class="kpi-row">
+  <div class="kpi"><div class="kpi-label">Tirs réalisés</div><div class="kpi-value">6</div><div class="kpi-sub">sur 7 planifiés</div></div>
+  <div class="kpi"><div class="kpi-label">Axes validés</div><div class="kpi-value">3 / 4</div><div class="kpi-sub">X+, X−, Z</div></div>
+  <div class="kpi"><div class="kpi-label">Axe en cours</div><div class="kpi-value">Y</div><div class="kpi-sub">3 tentatives</div></div>
+  <div class="kpi"><div class="kpi-label">Prochain tir</div><div class="kpi-value">6 mai</div><div class="kpi-sub">Embases alu · Y</div></div>
+</div>
+
+<p class="section-title">Synthèse par axe</p>
+<div class="axes-matrix">
+  <div class="axis-card">
+    <div class="axis-name">X+ - Frontal avant</div>
+    <div class="axis-tries">
+      <div class="try-dot dot-fail" title="10 sep 2025 - CINV_2453 - Invalide (embases amovibles)">1</div>
+      <div class="try-dot dot-ok" title="19 fév 2026 - CINV_2749 - Validé · 10.52g · 31.68 km/h">2</div>
+    </div>
+    <div class="axis-result">✓ Validé · CINV_2749 · 19 fév 2026</div>
+  </div>
+  <div class="axis-card">
+    <div class="axis-name">X− - Frontal arrière</div>
+    <div class="axis-tries">
+      <div class="try-dot dot-ok" title="19 fév 2026 - CINV_2748 - Validé · 10.31g · 31.08 km/h">1</div>
+    </div>
+    <div class="axis-result">✓ Validé · CINV_2748 · 19 fév 2026</div>
+  </div>
+  <div class="axis-card">
+    <div class="axis-name">Y - Latéral</div>
+    <div class="axis-tries">
+      <div class="try-dot dot-fail" title="19 fév 2026 - CINV_2750 - Éjection masse + cadre EpiShuttle">1</div>
+      <div class="try-dot dot-fail" title="25 mar 2026 - CINV_2773 - Détachement brancard">2</div>
+      <div class="try-dot dot-plan" title="6 mai 2026 - Planifié (embases alu)">3</div>
+    </div>
+    <div class="axis-result">⏳ En attente · tir prévu 6 mai 2026</div>
+  </div>
+  <div class="axis-card">
+    <div class="axis-name">Z - Vertical</div>
+    <div class="axis-tries">
+      <div class="try-dot dot-ok" title="20 fév 2026 - CINV_2751 - Validé · 10.49g · 31.49 km/h">1</div>
+    </div>
+    <div class="axis-result">✓ Validé · CINV_2751 · 20 fév 2026</div>
+  </div>
+</div>
+
+<p class="section-title">Historique des campagnes</p>
+
+<!-- ====== CAMPAGNE 1 ====== -->
+<div class="campaign">
+  <div class="campaign-header" onclick="toggle(this)">
+    <span class="camp-date">10 sep 2025</span>
+    <span class="camp-name">Campagne 1 - Tir X+ · CINV_2453</span>
+    <span class="camp-badge badge-fail">Invalidé</span>
+    <span class="chevron open">▶</span>
+  </div>
+  <div class="campaign-body open">
+    <div class="camp-reason"><strong>Cause :</strong> Embases de couche amovible non tenues lors du tir frontal avant.</div>
+    <div class="tirs-grid">
+      <div class="tir"><div class="tir-label">X−</div><div class="tir-desc">—</div><div class="tir-status ts-na">—</div></div>
+      <div class="tir"><div class="tir-label">X+</div><div class="tir-desc">CINV_2453</div><div class="tir-status ts-fail">Invalide</div></div>
+      <div class="tir"><div class="tir-label">Y</div><div class="tir-desc">—</div><div class="tir-status ts-na">—</div></div>
+      <div class="tir"><div class="tir-label">Z</div><div class="tir-desc">—</div><div class="tir-status ts-na">—</div></div>
+    </div>
+    <div class="charts-meta">
+      <div class="meta-chip">N° <strong>CINV_2453</strong></div>
+      <div class="meta-chip">Test <strong>Frontal Impact X+</strong></div>
+      <div class="meta-chip">Acc max <strong>10.79 g</strong></div>
+      <div class="meta-chip">Vitesse max <strong>31.06 km/h</strong></div>
+    </div>
+    <div class="legend">
+      <span style="display:inline-flex;align-items:center;gap:4px;"><span class="leg-line" style="background:#D85A30;"></span> Acc CFC60</span>
+      <span style="display:inline-flex;align-items:center;gap:4px;"><span class="leg-line" style="background:#3B8BD4;"></span> Corridor (limites min/max)</span>
+    </div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">Corridor <span class="ct-fail">Hors corridor</span></div>
+        <svg width="100%" viewBox="0 0 290 160">
+          <line x1="38" y1="8" x2="38" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+          <line x1="38" y1="138" x2="282" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+          <line x1="38" y1="105" x2="282" y2="105" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="38" y1="72"  x2="282" y2="72"  stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="38" y1="39"  x2="282" y2="39"  stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="67"  y1="8" x2="67"  y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="110" y1="8" x2="110" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="153" y1="8" x2="153" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="196" y1="8" x2="196" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="239" y1="8" x2="239" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <!-- y: 0..12g=130px, 1g=10.83px. py=138-g*10.83 -->
+          <text x="33" y="141" text-anchor="end" font-size="8" fill="#9c9a92">0</text>
+          <text x="33" y="75"  text-anchor="end" font-size="8" fill="#9c9a92">6</text>
+          <text x="33" y="10"  text-anchor="end" font-size="8" fill="#9c9a92">12</text>
+          <!-- x: -20..150ms=170ms=244px, 1ms=1.435px. px=38+(ms+20)*1.435 -->
+          <text x="38"  y="149" text-anchor="middle" font-size="8" fill="#9c9a92">-20</text>
+          <text x="110" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">30</text>
+          <text x="182" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">80</text>
+          <text x="254" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">130</text>
+          <text x="160" y="158" text-anchor="middle" font-size="8" fill="#9c9a92">Axe X (ms)</text>
+          <text x="8" y="75" text-anchor="middle" font-size="8" fill="#9c9a92" transform="rotate(-90,8,75)">Axe Y (g)</text>
+          <!-- Corridor ligne inf: (10,1)→(20,7.5)→(70,7.5)→(80,0) -->
+          <!-- px: 10→81, 20→95, 70→167, 80→182 | py: 1→127, 7.5→57, 0→138 -->
+          <polyline fill="none" stroke="#3B8BD4" stroke-width="1.5" stroke-linejoin="round" points="81,138 95,57 167,57 182,138"/>
+          <!-- Corridor ligne sup: (0,12.5)→(90,12.5)→(150,0) -->
+          <!-- px: 0→67, 90→196, 150→282 | py: 12.5→3, 0→138 -->
+          <polyline fill="none" stroke="#3B8BD4" stroke-width="1.5" stroke-linejoin="round" points="67,3 196,3 282,138"/>
+          <!-- Courbe 2453: 10.79g -->
+          <polyline fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linejoin="round"
+            points="38,136 47,132 61,118 75,88 90,50 104,32 118,26 133,23 147,22 162,21 176,25 190,35 205,62 219,100 233,128 248,136 262,137"/>
+          <line x1="162" y1="8" x2="162" y2="21" stroke="#D85A30" stroke-width="0.7" stroke-dasharray="2,2"/>
+          <text x="165" y="18" font-size="8" fill="#D85A30" font-weight="600">10.79 g</text>
+        </svg>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Vitesse <span class="ct-ok">31.06 km/h</span></div>
+        <svg width="100%" viewBox="0 0 290 160">
+          <line x1="38" y1="8" x2="38" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+          <line x1="38" y1="138" x2="282" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+          <line x1="38" y1="105" x2="282" y2="105" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="38" y1="72"  x2="282" y2="72"  stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="38" y1="39"  x2="282" y2="39"  stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="67"  y1="8" x2="67"  y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="110" y1="8" x2="110" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="153" y1="8" x2="153" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="196" y1="8" x2="196" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="239" y1="8" x2="239" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <!-- y: 0..35km/h=130px, 1km/h=3.71px -->
+          <text x="33" y="141" text-anchor="end" font-size="8" fill="#9c9a92">0</text>
+          <text x="33" y="103" text-anchor="end" font-size="8" fill="#9c9a92">10</text>
+          <text x="33" y="66"  text-anchor="end" font-size="8" fill="#9c9a92">20</text>
+          <text x="33" y="29"  text-anchor="end" font-size="8" fill="#9c9a92">30</text>
+          <text x="38"  y="149" text-anchor="middle" font-size="8" fill="#9c9a92">-20</text>
+          <text x="110" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">30</text>
+          <text x="182" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">80</text>
+          <text x="254" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">130</text>
+          <text x="160" y="158" text-anchor="middle" font-size="8" fill="#9c9a92">Axe X (ms)</text>
+          <text x="8" y="75" text-anchor="middle" font-size="8" fill="#9c9a92" transform="rotate(-90,8,75)">Axe Y (km/h)</text>
+          <!-- 31.06km/h → py=138-31.06*3.71=23 -->
+          <polyline fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linejoin="round"
+            points="38,138 52,137 67,136 81,132 95,125 110,116 124,104 138,89 153,72 167,54 182,36 196,23 210,23 224,23 239,23 253,23 268,23"/>
+          <line x1="196" y1="8" x2="196" y2="23" stroke="#3B8BD4" stroke-width="0.7" stroke-dasharray="2,2"/>
+          <line x1="196" y1="23" x2="196" y2="138" stroke="#3B8BD4" stroke-width="0.7" stroke-dasharray="2,2"/>
+          <text x="199" y="18" font-size="8" fill="#3B8BD4">31.06 km/h · ~105ms</text>
+        </svg>
+      </div>
+    </div>
+    <div class="obs-box">Observation UTAC : Embases de couche amovible non tenues - tir non représentatif</div>
+  </div>
+</div>
+
+<!-- ====== CAMPAGNE 2 ====== -->
+<div class="campaign">
+  <div class="campaign-header" onclick="toggle(this)">
+    <span class="camp-date">19–20 fév 2026</span>
+    <span class="camp-name">Campagne 2 - Tirs X−, X+, Y, Z, embases 10g · CINV_2748–2751</span>
+    <span class="camp-badge badge-partial">3/4 validés</span>
+    <span class="chevron open">▶</span>
+  </div>
+  <div class="campaign-body open">
+    <div class="camp-reason"><strong>Correction :</strong> Nouvelles embases de couche amovible. - <strong>Échec Y :</strong> Éjection de la masse et du cadre EpiShuttle · Tests d'arrachement de colle menés en interne → changement de colle.</div>
+    <div class="tirs-grid">
+      <div class="tir"><div class="tir-label">X−</div><div class="tir-desc">CINV_2748</div><div class="tir-status ts-ok">Validé</div></div>
+      <div class="tir"><div class="tir-label">X+</div><div class="tir-desc">CINV_2749</div><div class="tir-status ts-ok">Validé</div></div>
+      <div class="tir"><div class="tir-label">Y</div><div class="tir-desc">CINV_2750</div><div class="tir-status ts-fail">Échec</div></div>
+      <div class="tir"><div class="tir-label">Z</div><div class="tir-desc">CINV_2751</div><div class="tir-status ts-ok">Validé</div></div>
+    </div>
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="showTab('c2','xm',this)">X− · CINV_2748</button>
+      <button class="tab-btn" onclick="showTab('c2','xp',this)">X+ · CINV_2749</button>
+      <button class="tab-btn" onclick="showTab('c2','y',this)">Y · CINV_2750</button>
+      <button class="tab-btn" onclick="showTab('c2','z',this)">Z · CINV_2751</button>
+    </div>
+
+    <!-- X- 2748 -->
+    <div id="c2-xm">
+      <div class="charts-meta">
+        <div class="meta-chip">N° <strong>CINV_2748</strong></div>
+        <div class="meta-chip">Test <strong>Frontal Impact X−</strong></div>
+        <div class="meta-chip">Date <strong>19/02/2026</strong></div>
+        <div class="meta-chip">Ref. <strong>ARCSAS2503933</strong></div>
+        <div class="meta-chip">Acc <strong>10.31 g</strong></div>
+        <div class="meta-chip">Vitesse <strong>31.08 km/h</strong></div>
+      </div>
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-title">Corridor <span class="ct-ok">Dans corridor</span></div>
+          <svg width="100%" viewBox="0 0 290 160">
+            <line x1="38" y1="8" x2="38" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+            <line x1="38" y1="138" x2="282" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+            <line x1="38" y1="105" x2="282" y2="105" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="38" y1="72"  x2="282" y2="72"  stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="38" y1="39"  x2="282" y2="39"  stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="67"  y1="8" x2="67"  y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="110" y1="8" x2="110" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="153" y1="8" x2="153" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="196" y1="8" x2="196" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="239" y1="8" x2="239" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <text x="33" y="141" text-anchor="end" font-size="8" fill="#9c9a92">0</text>
+            <text x="33" y="75"  text-anchor="end" font-size="8" fill="#9c9a92">6</text>
+            <text x="33" y="10"  text-anchor="end" font-size="8" fill="#9c9a92">12</text>
+            <text x="38"  y="149" text-anchor="middle" font-size="8" fill="#9c9a92">-20</text>
+            <text x="110" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">30</text>
+            <text x="182" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">80</text>
+            <text x="254" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">130</text>
+            <text x="160" y="158" text-anchor="middle" font-size="8" fill="#9c9a92">Axe X (ms)</text>
+            <text x="8" y="75" text-anchor="middle" font-size="8" fill="#9c9a92" transform="rotate(-90,8,75)">Axe Y (g)</text>
+            <polyline fill="none" stroke="#3B8BD4" stroke-width="1.5" stroke-linejoin="round" points="81,138 95,57 167,57 182,138"/>
+            <polyline fill="none" stroke="#3B8BD4" stroke-width="1.5" stroke-linejoin="round" points="67,3 196,3 282,138"/>
+            <polyline fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linejoin="round"
+              points="38,136 47,132 61,120 75,92 90,60 104,37 118,28 133,25 147,24 162,25 176,30 190,44 205,74 219,108 233,130 248,136 262,137"/>
+            <line x1="147" y1="8" x2="147" y2="24" stroke="#D85A30" stroke-width="0.7" stroke-dasharray="2,2"/>
+            <text x="150" y="18" font-size="8" fill="#D85A30" font-weight="600">10.31 g</text>
+          </svg>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Vitesse <span class="ct-ok">31.08 km/h</span></div>
+          <svg width="100%" viewBox="0 0 290 160">
+            <line x1="38" y1="8" x2="38" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+            <line x1="38" y1="138" x2="282" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+            <line x1="38" y1="105" x2="282" y2="105" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="38" y1="72"  x2="282" y2="72"  stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="38" y1="39"  x2="282" y2="39"  stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="67"  y1="8" x2="67"  y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="110" y1="8" x2="110" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="153" y1="8" x2="153" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="196" y1="8" x2="196" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="239" y1="8" x2="239" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <text x="33" y="141" text-anchor="end" font-size="8" fill="#9c9a92">0</text>
+            <text x="33" y="103" text-anchor="end" font-size="8" fill="#9c9a92">10</text>
+            <text x="33" y="66"  text-anchor="end" font-size="8" fill="#9c9a92">20</text>
+            <text x="33" y="29"  text-anchor="end" font-size="8" fill="#9c9a92">30</text>
+            <text x="38"  y="149" text-anchor="middle" font-size="8" fill="#9c9a92">-20</text>
+            <text x="110" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">30</text>
+            <text x="182" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">80</text>
+            <text x="254" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">130</text>
+            <text x="160" y="158" text-anchor="middle" font-size="8" fill="#9c9a92">Axe X (ms)</text>
+            <text x="8" y="75" text-anchor="middle" font-size="8" fill="#9c9a92" transform="rotate(-90,8,75)">Axe Y (km/h)</text>
+            <polyline fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linejoin="round"
+              points="38,138 52,137 67,136 81,132 95,125 110,115 124,103 138,88 153,70 167,52 182,35 196,24 210,24 224,24 239,24 253,24 268,24"/>
+            <line x1="196" y1="8" x2="196" y2="24" stroke="#3B8BD4" stroke-width="0.7" stroke-dasharray="2,2"/>
+            <line x1="196" y1="24" x2="196" y2="138" stroke="#3B8BD4" stroke-width="0.7" stroke-dasharray="2,2"/>
+            <text x="199" y="18" font-size="8" fill="#3B8BD4">31.08 km/h</text>
+          </svg>
+        </div>
+      </div>
+      <div class="obs-box-ok">Observation UTAC : RAS - tir validé</div>
+    </div>
+
+    <!-- X+ 2749 -->
+    <div id="c2-xp" style="display:none">
+      <div class="charts-meta">
+        <div class="meta-chip">N° <strong>CINV_2749</strong></div>
+        <div class="meta-chip">Test <strong>Frontal Impact X+</strong></div>
+        <div class="meta-chip">Date <strong>19/02/2026</strong></div>
+        <div class="meta-chip">Ref. <strong>ARCSAS2503933</strong></div>
+        <div class="meta-chip">Acc <strong>10.52 g</strong></div>
+        <div class="meta-chip">Vitesse <strong>31.68 km/h</strong></div>
+      </div>
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-title">Corridor <span class="ct-ok">Dans corridor</span></div>
+          <svg width="100%" viewBox="0 0 290 160">
+            <line x1="38" y1="8" x2="38" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+            <line x1="38" y1="138" x2="282" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+            <line x1="38" y1="105" x2="282" y2="105" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="38" y1="72"  x2="282" y2="72"  stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="38" y1="39"  x2="282" y2="39"  stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="67"  y1="8" x2="67"  y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="110" y1="8" x2="110" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="153" y1="8" x2="153" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="196" y1="8" x2="196" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="239" y1="8" x2="239" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <text x="33" y="141" text-anchor="end" font-size="8" fill="#9c9a92">0</text>
+            <text x="33" y="75"  text-anchor="end" font-size="8" fill="#9c9a92">6</text>
+            <text x="33" y="10"  text-anchor="end" font-size="8" fill="#9c9a92">12</text>
+            <text x="38"  y="149" text-anchor="middle" font-size="8" fill="#9c9a92">-20</text>
+            <text x="110" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">30</text>
+            <text x="182" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">80</text>
+            <text x="254" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">130</text>
+            <text x="160" y="158" text-anchor="middle" font-size="8" fill="#9c9a92">Axe X (ms)</text>
+            <text x="8" y="75" text-anchor="middle" font-size="8" fill="#9c9a92" transform="rotate(-90,8,75)">Axe Y(g)</text>
+            <polyline fill="none" stroke="#3B8BD4" stroke-width="1.5" stroke-linejoin="round" points="81,138 95,57 167,57 182,138"/>
+            <polyline fill="none" stroke="#3B8BD4" stroke-width="1.5" stroke-linejoin="round" points="67,3 196,3 282,138"/>
+            <polyline fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linejoin="round"
+              points="38,136 47,132 61,118 75,88 90,55 104,34 118,27 133,24 147,23 162,22 176,27 190,40 205,70 219,106 233,129 248,136 262,137"/>
+            <line x1="162" y1="8" x2="162" y2="22" stroke="#D85A30" stroke-width="0.7" stroke-dasharray="2,2"/>
+            <text x="165" y="18" font-size="8" fill="#D85A30" font-weight="600">10.52 g</text>
+          </svg>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Vitesse <span class="ct-ok">31.68 km/h</span></div>
+          <svg width="100%" viewBox="0 0 290 160">
+            <line x1="38" y1="8" x2="38" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+            <line x1="38" y1="138" x2="282" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+            <line x1="38" y1="105" x2="282" y2="105" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="38" y1="72"  x2="282" y2="72"  stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="38" y1="39"  x2="282" y2="39"  stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="67"  y1="8" x2="67"  y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="110" y1="8" x2="110" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="153" y1="8" x2="153" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="196" y1="8" x2="196" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="239" y1="8" x2="239" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <text x="33" y="141" text-anchor="end" font-size="8" fill="#9c9a92">0</text>
+            <text x="33" y="103" text-anchor="end" font-size="8" fill="#9c9a92">10</text>
+            <text x="33" y="66"  text-anchor="end" font-size="8" fill="#9c9a92">20</text>
+            <text x="33" y="29"  text-anchor="end" font-size="8" fill="#9c9a92">30</text>
+            <text x="38"  y="149" text-anchor="middle" font-size="8" fill="#9c9a92">-20</text>
+            <text x="110" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">30</text>
+            <text x="182" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">80</text>
+            <text x="254" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">130</text>
+            <text x="160" y="158" text-anchor="middle" font-size="8" fill="#9c9a92">Axe X (ms)</text>
+            <text x="8" y="75" text-anchor="middle" font-size="8" fill="#9c9a92" transform="rotate(-90,8,75)">Axe Y (km/h)</text>
+            <polyline fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linejoin="round"
+              points="38,138 52,137 67,136 81,132 95,124 110,114 124,101 138,86 153,68 167,49 182,31 196,21 210,21 224,21 239,21 253,21 268,21"/>
+            <line x1="196" y1="8" x2="196" y2="21" stroke="#3B8BD4" stroke-width="0.7" stroke-dasharray="2,2"/>
+            <line x1="196" y1="21" x2="196" y2="138" stroke="#3B8BD4" stroke-width="0.7" stroke-dasharray="2,2"/>
+            <text x="199" y="18" font-size="8" fill="#3B8BD4">31.68 km/h</text>
+          </svg>
+        </div>
+      </div>
+      <div class="obs-box-ok">Observation UTAC : RAS - tir validé</div>
+    </div>
+
+    <!-- Y 2750 -->
+    <div id="c2-y" style="display:none">
+      <div class="charts-meta">
+        <div class="meta-chip">N° <strong>CINV_2750</strong></div>
+        <div class="meta-chip">Test <strong>Side Impact Y</strong></div>
+        <div class="meta-chip">Date <strong>19/02/2026</strong></div>
+        <div class="meta-chip">Ref. <strong>ARCSAS2503933</strong></div>
+        <div class="meta-chip">Acc <strong>10.40 g</strong></div>
+        <div class="meta-chip">Vitesse <strong>31.27 km/h</strong></div>
+      </div>
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-title">Corridor <span class="ct-ok">Dans corridor</span></div>
+          <svg width="100%" viewBox="0 0 290 160">
+            <line x1="38" y1="8" x2="38" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+            <line x1="38" y1="138" x2="282" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+            <line x1="38" y1="105" x2="282" y2="105" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="38" y1="72"  x2="282" y2="72"  stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="38" y1="39"  x2="282" y2="39"  stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="67"  y1="8" x2="67"  y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="110" y1="8" x2="110" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="153" y1="8" x2="153" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="196" y1="8" x2="196" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="239" y1="8" x2="239" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <text x="33" y="141" text-anchor="end" font-size="8" fill="#9c9a92">0</text>
+            <text x="33" y="75"  text-anchor="end" font-size="8" fill="#9c9a92">6</text>
+            <text x="33" y="10"  text-anchor="end" font-size="8" fill="#9c9a92">12</text>
+            <text x="38"  y="149" text-anchor="middle" font-size="8" fill="#9c9a92">-20</text>
+            <text x="110" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">30</text>
+            <text x="182" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">80</text>
+            <text x="254" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">130</text>
+            <text x="160" y="158" text-anchor="middle" font-size="8" fill="#9c9a92">Axe X (ms)</text>
+            <text x="8" y="75" text-anchor="middle" font-size="8" fill="#9c9a92" transform="rotate(-90,8,75)">Axe Y (g)</text>
+            <polyline fill="none" stroke="#3B8BD4" stroke-width="1.5" stroke-linejoin="round" points="81,138 95,57 167,57 182,138"/>
+            <polyline fill="none" stroke="#3B8BD4" stroke-width="1.5" stroke-linejoin="round" points="67,3 196,3 282,138"/>
+            <polyline fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linejoin="round"
+              points="38,136 47,132 61,119 75,90 90,57 104,35 118,28 133,25 147,24 162,23 176,28 190,44 205,72 219,108 233,130 248,136 262,137"/>
+            <line x1="162" y1="8" x2="162" y2="23" stroke="#D85A30" stroke-width="0.7" stroke-dasharray="2,2"/>
+            <text x="165" y="18" font-size="8" fill="#D85A30" font-weight="600">10.40 g</text>
+          </svg>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Vitesse <span class="ct-ok">31.27 km/h</span></div>
+          <svg width="100%" viewBox="0 0 290 160">
+            <line x1="38" y1="8" x2="38" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+            <line x1="38" y1="138" x2="282" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+            <line x1="38" y1="105" x2="282" y2="105" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="38" y1="72"  x2="282" y2="72"  stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="38" y1="39"  x2="282" y2="39"  stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="67"  y1="8" x2="67"  y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="110" y1="8" x2="110" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="153" y1="8" x2="153" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="196" y1="8" x2="196" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="239" y1="8" x2="239" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <text x="33" y="141" text-anchor="end" font-size="8" fill="#9c9a92">0</text>
+            <text x="33" y="103" text-anchor="end" font-size="8" fill="#9c9a92">10</text>
+            <text x="33" y="66"  text-anchor="end" font-size="8" fill="#9c9a92">20</text>
+            <text x="33" y="29"  text-anchor="end" font-size="8" fill="#9c9a92">30</text>
+            <text x="38"  y="149" text-anchor="middle" font-size="8" fill="#9c9a92">-20</text>
+            <text x="110" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">30</text>
+            <text x="182" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">80</text>
+            <text x="254" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">130</text>
+            <text x="160" y="158" text-anchor="middle" font-size="8" fill="#9c9a92">Axe X (ms)</text>
+            <text x="8" y="75" text-anchor="middle" font-size="8" fill="#9c9a92" transform="rotate(-90,8,75)">Axe Y (km/h)</text>
+            <polyline fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linejoin="round"
+              points="38,138 52,137 67,136 81,132 95,125 110,115 124,102 138,87 153,69 167,51 182,33 196,22 210,22 224,22 239,22 253,22 268,22"/>
+            <line x1="196" y1="8" x2="196" y2="22" stroke="#3B8BD4" stroke-width="0.7" stroke-dasharray="2,2"/>
+            <line x1="196" y1="22" x2="196" y2="138" stroke="#3B8BD4" stroke-width="0.7" stroke-dasharray="2,2"/>
+            <text x="199" y="18" font-size="8" fill="#3B8BD4">31.27 km/h</text>
+          </svg>
+        </div>
+      </div>
+      <div class="obs-box">Observation UTAC : EJECTION DE LA MASSE ET DU CADRE EPISHUTTLE - tir invalide</div>
+    </div>
+
+    <!-- Z 2751 -->
+    <div id="c2-z" style="display:none">
+      <div class="charts-meta">
+        <div class="meta-chip">N° <strong>CINV_2751</strong></div>
+        <div class="meta-chip">Test <strong>Vertical Impact Z</strong></div>
+        <div class="meta-chip">Date <strong>20/02/2026</strong></div>
+        <div class="meta-chip">Ref. <strong>ARCSAS2503933</strong></div>
+        <div class="meta-chip">Acc <strong>10.49 g</strong></div>
+        <div class="meta-chip">Vitesse <strong>31.49 km/h</strong></div>
+      </div>
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-title">Corridor <span class="ct-ok">Dans corridor</span></div>
+          <svg width="100%" viewBox="0 0 290 160">
+            <line x1="38" y1="8" x2="38" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+            <line x1="38" y1="138" x2="282" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+            <line x1="38" y1="105" x2="282" y2="105" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="38" y1="72"  x2="282" y2="72"  stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="38" y1="39"  x2="282" y2="39"  stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="67"  y1="8" x2="67"  y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="110" y1="8" x2="110" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="153" y1="8" x2="153" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="196" y1="8" x2="196" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="239" y1="8" x2="239" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <text x="33" y="141" text-anchor="end" font-size="8" fill="#9c9a92">0</text>
+            <text x="33" y="75"  text-anchor="end" font-size="8" fill="#9c9a92">6</text>
+            <text x="33" y="10"  text-anchor="end" font-size="8" fill="#9c9a92">12</text>
+            <text x="38"  y="149" text-anchor="middle" font-size="8" fill="#9c9a92">-20</text>
+            <text x="110" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">30</text>
+            <text x="182" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">80</text>
+            <text x="254" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">130</text>
+            <text x="160" y="158" text-anchor="middle" font-size="8" fill="#9c9a92">Axe X (ms)</text>
+            <text x="8" y="75" text-anchor="middle" font-size="8" fill="#9c9a92" transform="rotate(-90,8,75)">Axe Y (g)</text>
+            <polyline fill="none" stroke="#3B8BD4" stroke-width="1.5" stroke-linejoin="round" points="81,138 95,57 167,57 182,138"/>
+            <polyline fill="none" stroke="#3B8BD4" stroke-width="1.5" stroke-linejoin="round" points="67,3 196,3 282,138"/>
+            <!-- légère double bosse visible sur le PDF Z -->
+            <polyline fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linejoin="round"
+              points="38,136 47,132 61,119 75,89 90,56 104,34 118,27 128,25 133,27 140,24 147,23 162,24 176,29 190,43 205,71 219,107 233,130 248,136 262,137"/>
+            <line x1="142" y1="8" x2="142" y2="23" stroke="#D85A30" stroke-width="0.7" stroke-dasharray="2,2"/>
+            <text x="145" y="18" font-size="8" fill="#D85A30" font-weight="600">10.49 g</text>
+          </svg>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Vitesse <span class="ct-ok">31.49 km/h</span></div>
+          <svg width="100%" viewBox="0 0 290 160">
+            <line x1="38" y1="8" x2="38" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+            <line x1="38" y1="138" x2="282" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+            <line x1="38" y1="105" x2="282" y2="105" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="38" y1="72"  x2="282" y2="72"  stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="38" y1="39"  x2="282" y2="39"  stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="67"  y1="8" x2="67"  y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="110" y1="8" x2="110" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="153" y1="8" x2="153" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="196" y1="8" x2="196" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <line x1="239" y1="8" x2="239" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+            <text x="33" y="141" text-anchor="end" font-size="8" fill="#9c9a92">0</text>
+            <text x="33" y="103" text-anchor="end" font-size="8" fill="#9c9a92">10</text>
+            <text x="33" y="66"  text-anchor="end" font-size="8" fill="#9c9a92">20</text>
+            <text x="33" y="29"  text-anchor="end" font-size="8" fill="#9c9a92">30</text>
+            <text x="38"  y="149" text-anchor="middle" font-size="8" fill="#9c9a92">-20</text>
+            <text x="110" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">30</text>
+            <text x="182" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">80</text>
+            <text x="254" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">130</text>
+            <text x="160" y="158" text-anchor="middle" font-size="8" fill="#9c9a92">Axe X (ms)</text>
+            <text x="8" y="75" text-anchor="middle" font-size="8" fill="#9c9a92" transform="rotate(-90,8,75)">Axe Y (km/h)</text>
+            <polyline fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linejoin="round"
+              points="38,138 52,137 67,136 81,132 95,124 110,114 124,101 138,86 153,68 167,50 182,32 196,21 210,21 224,21 239,21 253,21 268,21"/>
+            <line x1="196" y1="8" x2="196" y2="21" stroke="#3B8BD4" stroke-width="0.7" stroke-dasharray="2,2"/>
+            <line x1="196" y1="21" x2="196" y2="138" stroke="#3B8BD4" stroke-width="0.7" stroke-dasharray="2,2"/>
+            <text x="199" y="18" font-size="8" fill="#3B8BD4">31.49 km/h</text>
+          </svg>
+        </div>
+      </div>
+      <div class="obs-box-ok">Observation UTAC : RAS - tir validé</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== CAMPAGNE 3 ====== -->
+<div class="campaign">
+  <div class="campaign-header" onclick="toggle(this)">
+    <span class="camp-date">25 mar 2026</span>
+    <span class="camp-name">Campagne 3 - Tir Y, nouvelle colle · CINV_2773</span>
+    <span class="camp-badge badge-fail">Invalidé</span>
+    <span class="chevron open">▶</span>
+  </div>
+  <div class="campaign-body open">
+    <div class="camp-reason"><strong>Correction :</strong> Changement de colle suite aux tests d'arrachement internes. - <strong>Cause d'échec :</strong> Détachement du brancard · Embases ancrage plastique remplacées par aluminium pour la prochaine campagne.</div>
+    <div class="tirs-grid">
+      <div class="tir"><div class="tir-label">X+</div><div class="tir-desc">—</div><div class="tir-status ts-na">—</div></div>
+      <div class="tir"><div class="tir-label">X−</div><div class="tir-desc">—</div><div class="tir-status ts-na">—</div></div>
+      <div class="tir"><div class="tir-label">Y</div><div class="tir-desc">CINV_2773</div><div class="tir-status ts-fail">Invalide</div></div>
+      <div class="tir"><div class="tir-label">Z</div><div class="tir-desc">—</div><div class="tir-status ts-na">—</div></div>
+    </div>
+    <div class="charts-meta">
+      <div class="meta-chip">N° <strong>CINV_2773</strong></div>
+      <div class="meta-chip">Test <strong>Side Impact Y</strong></div>
+      <div class="meta-chip">Date <strong>25/03/2026</strong></div>
+      <div class="meta-chip">Ref. <strong>ARCSAS2601836</strong></div>
+      <div class="meta-chip">Acc <strong>11.05 g</strong></div>
+      <div class="meta-chip">Vitesse <strong>32.02 km/h</strong></div>
+    </div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">Corridor <span class="ct-ok">Dans corridor</span></div>
+        <svg width="100%" viewBox="0 0 290 160">
+          <line x1="38" y1="8" x2="38" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+          <line x1="38" y1="138" x2="282" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+          <line x1="38" y1="105" x2="282" y2="105" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="38" y1="72"  x2="282" y2="72"  stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="38" y1="39"  x2="282" y2="39"  stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="67"  y1="8" x2="67"  y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="110" y1="8" x2="110" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="153" y1="8" x2="153" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="196" y1="8" x2="196" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="239" y1="8" x2="239" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <text x="33" y="141" text-anchor="end" font-size="8" fill="#9c9a92">0</text>
+          <text x="33" y="75"  text-anchor="end" font-size="8" fill="#9c9a92">6</text>
+          <text x="33" y="10"  text-anchor="end" font-size="8" fill="#9c9a92">12</text>
+          <text x="38"  y="149" text-anchor="middle" font-size="8" fill="#9c9a92">-20</text>
+          <text x="110" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">30</text>
+          <text x="182" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">80</text>
+          <text x="254" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">130</text>
+          <text x="160" y="158" text-anchor="middle" font-size="8" fill="#9c9a92">Axe X (ms)</text>
+          <text x="8" y="75" text-anchor="middle" font-size="8" fill="#9c9a92" transform="rotate(-90,8,75)">Axe Y(g)</text>
+          <polyline fill="none" stroke="#3B8BD4" stroke-width="1.5" stroke-linejoin="round" points="81,138 95,57 167,57 182,138"/>
+          <polyline fill="none" stroke="#3B8BD4" stroke-width="1.5" stroke-linejoin="round" points="67,3 196,3 282,138"/>
+          <!-- 11.05g, double bosse visible sur PDF 2773 -->
+          <polyline fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linejoin="round"
+            points="38,136 47,131 61,117 75,86 90,52 104,30 118,24 128,22 133,24 142,20 147,21 155,22 162,22 176,28 190,45 205,73 219,110 233,131 248,136 262,137"/>
+          <line x1="142" y1="8" x2="142" y2="20" stroke="#D85A30" stroke-width="0.7" stroke-dasharray="2,2"/>
+          <text x="145" y="18" font-size="8" fill="#D85A30" font-weight="600">11.05 g</text>
+        </svg>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Vitesse <span class="ct-ok">32.02 km/h</span></div>
+        <svg width="100%" viewBox="0 0 290 160">
+          <line x1="38" y1="8" x2="38" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+          <line x1="38" y1="138" x2="282" y2="138" stroke="#b4b2a9" stroke-width="0.5"/>
+          <line x1="38" y1="105" x2="282" y2="105" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="38" y1="72"  x2="282" y2="72"  stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="38" y1="39"  x2="282" y2="39"  stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="67"  y1="8" x2="67"  y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="110" y1="8" x2="110" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="153" y1="8" x2="153" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="196" y1="8" x2="196" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <line x1="239" y1="8" x2="239" y2="138" stroke="#d3d1c7" stroke-width="0.3"/>
+          <text x="33" y="141" text-anchor="end" font-size="8" fill="#9c9a92">0</text>
+          <text x="33" y="103" text-anchor="end" font-size="8" fill="#9c9a92">10</text>
+          <text x="33" y="66"  text-anchor="end" font-size="8" fill="#9c9a92">20</text>
+          <text x="33" y="29"  text-anchor="end" font-size="8" fill="#9c9a92">30</text>
+          <text x="38"  y="149" text-anchor="middle" font-size="8" fill="#9c9a92">-20</text>
+          <text x="110" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">30</text>
+          <text x="182" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">80</text>
+          <text x="254" y="149" text-anchor="middle" font-size="8" fill="#9c9a92">130</text>
+          <text x="160" y="158" text-anchor="middle" font-size="8" fill="#9c9a92">Axe X (ms)</text>
+          <text x="8" y="75" text-anchor="middle" font-size="8" fill="#9c9a92" transform="rotate(-90,8,75)">Axe Y (km/h)</text>
+          <!-- 32.02 → py=138-32.02*3.71=19 -->
+          <polyline fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linejoin="round"
+            points="38,138 52,137 67,135 81,131 95,123 110,112 124,99 138,83 153,64 167,45 182,27 196,19 210,19 224,19 239,19 253,19 268,19"/>
+          <line x1="196" y1="8" x2="196" y2="19" stroke="#3B8BD4" stroke-width="0.7" stroke-dasharray="2,2"/>
+          <line x1="196" y1="19" x2="196" y2="138" stroke="#3B8BD4" stroke-width="0.7" stroke-dasharray="2,2"/>
+          <text x="199" y="17" font-size="8" fill="#3B8BD4">32.02 km/h</text>
+        </svg>
+      </div>
+    </div>
+    <div class="obs-box">Observation UTAC : Détachement du brancard - tir invalide</div>
+  </div>
+</div>
+
+<!-- ====== CAMPAGNE 4 planifiée ====== -->
+<div class="campaign" style="opacity:0.75;">
+  <div class="campaign-header" onclick="toggle(this)">
+    <span class="camp-date">6 mai 2026</span>
+    <span class="camp-name">Campagne 4 - Tir Y, embases ancrage aluminium</span>
+    <span class="camp-badge badge-planned">Planifié</span>
+    <span class="chevron">▶</span>
+  </div>
+  <div class="campaign-body">
+    <div class="camp-reason"><strong>Correction :</strong> Remplacement des embases plastique par des embases aluminium. Tir Y uniquement.</div>
+    <div class="tirs-grid">
+      <div class="tir"><div class="tir-label">X+</div><div class="tir-desc">—</div><div class="tir-status ts-na">—</div></div>
+      <div class="tir"><div class="tir-label">X−</div><div class="tir-desc">—</div><div class="tir-status ts-na">—</div></div>
+      <div class="tir"><div class="tir-label">Y</div><div class="tir-desc">Planifié</div><div class="tir-status ts-planned">À venir</div></div>
+      <div class="tir"><div class="tir-label">Z</div><div class="tir-desc">—</div><div class="tir-status ts-na">—</div></div>
+    </div>
+    <div class="upload-zone">+ Résultats à intégrer après le 6 mai 2026</div>
+  </div>
+</div>
+
+<script>
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+function showTab(camp, tir, btn) {
+  ['xm','xp','y','z'].forEach(t => {
+    const el = document.getElementById(camp+'-'+t);
+    if (el) el.style.display = t === tir ? 'block' : 'none';
+  });
+  btn.closest('.tab-row').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
