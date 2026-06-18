@@ -6,278 +6,223 @@
 <title>RTS Chapuis — Certification EN 1789+A2 · Cabbri V2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Red+Hat+Mono:wght@400;500;700&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:oklch(0.09 0.006 220);
-  --s1:oklch(0.13 0.007 220);
-  --s2:oklch(0.17 0.007 220);
-  --s3:oklch(0.21 0.006 220);
-  --bd:oklch(0.27 0.010 220);
-  --bdd:oklch(0.20 0.007 220);
-  --t1:oklch(0.93 0.005 220);
-  --t2:oklch(0.62 0.010 220);
-  --t3:oklch(0.40 0.008 220);
-  --t4:oklch(0.26 0.006 220);
-  /* Semantic */
-  --grn:oklch(0.68 0.18 152);
-  --gbg:oklch(0.15 0.06 152);
-  --gbr:oklch(0.30 0.12 152);
-  --ora:oklch(0.68 0.18 30);
-  --obg:oklch(0.15 0.06 30);
-  --obr:oklch(0.30 0.12 30);
-  --amb:oklch(0.74 0.15 72);
-  --abg:oklch(0.15 0.05 72);
-  --abr:oklch(0.28 0.09 72);
-  --acc:oklch(0.76 0.14 205);
-  --acb:oklch(0.16 0.05 205);
-  /* Chart direction colors */
-  --cx:oklch(0.78 0.14 200);   /* X axis: teal */
-  --cy:oklch(0.76 0.15 70);    /* Y axis: amber */
-  --cz:oklch(0.76 0.14 285);   /* Z axis: indigo */
-  --cv:oklch(0.72 0.12 200);   /* Velocity: slightly dimmer teal */
-  --fd:'Syne',sans-serif;
-  --fm:'Red Hat Mono',monospace;
-  --fb:'Figtree',sans-serif;
+  /* Paper-tinted neutrals — never pure white/black, warm hue toward the brand */
+  --bg: oklch(0.97 0.006 50);
+  --surface: oklch(0.995 0.003 50);
+  --surface-2: oklch(0.955 0.006 50);
+  --ink-1: oklch(0.22 0.012 35);
+  --ink-2: oklch(0.46 0.012 35);
+  --ink-3: oklch(0.64 0.010 35);
+  --line: oklch(0.84 0.010 40);
+  --line-soft: oklch(0.90 0.007 40);
+
+  /* Full-palette strategy: deliberate semantic roles for status data-viz */
+  --brand: oklch(0.50 0.19 26);
+  --ok: oklch(0.52 0.13 152);
+  --ok-bg: oklch(0.94 0.035 152);
+  --ok-line: oklch(0.74 0.10 152);
+  --warn: oklch(0.58 0.135 68);
+  --warn-bg: oklch(0.94 0.045 68);
+  --warn-line: oklch(0.78 0.11 68);
+  --fail: oklch(0.50 0.19 26);
+  --fail-bg: oklch(0.95 0.025 26);
+  --fail-line: oklch(0.74 0.13 26);
+
+  /* Direction identity colors for chart curves (distinct from status colors) */
+  --cx: oklch(0.46 0.13 232);
+  --cy: oklch(0.58 0.135 68);
+  --cz: oklch(0.47 0.14 296);
+
+  --fd:'Archivo',sans-serif;
+  --fm:'IBM Plex Mono',monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  background:var(--bg);
-  background-image:radial-gradient(circle,oklch(0.20 0.006 220) 1px,transparent 1px);
-  background-size:28px 28px;
-  color:var(--t1);font-family:var(--fb);font-size:14px;line-height:1.6;min-height:100vh;
+  background:var(--bg);color:var(--ink-1);
+  font-family:var(--fd);font-size:14px;line-height:1.6;min-height:100vh;
 }
 
-/* ── HEADER ── */
+/* ── MASTHEAD ── */
 .hdr{
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 32px;height:56px;
-  border-bottom:1px solid var(--bdd);
-  background:oklch(0.09 0.006 220 / .92);
-  backdrop-filter:blur(16px);
-  position:sticky;top:0;z-index:100;
+  padding:0 36px;height:64px;border-bottom:2px solid var(--ink-1);
+  background:var(--bg);position:sticky;top:0;z-index:100;
 }
 .hdr-left{display:flex;align-items:center;gap:18px}
-.logo{font-family:var(--fd);font-size:18px;font-weight:800;letter-spacing:-.01em;color:var(--t1)}
-.logo em{font-style:normal;color:var(--ora)}
-.hdr-sep{width:1px;height:22px;background:var(--bdd)}
-.proj{font-family:var(--fd);font-size:13px;font-weight:600;color:var(--t2);letter-spacing:.01em}
-.hdr-right{display:flex;align-items:center;gap:14px}
-.hdr-ref{font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.04em}
-.pill{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:3px 9px;border-radius:20px;border:1px solid;
-  font-family:var(--fd);font-weight:700;font-size:10px;letter-spacing:.06em;
+.logo{font-family:var(--fd);font-size:21px;font-weight:800;letter-spacing:-.01em;color:var(--ink-1)}
+.logo em{font-style:normal;color:var(--brand)}
+.hdr-sep{width:1px;height:22px;background:var(--line)}
+.proj{font-family:var(--fd);font-size:13px;font-weight:600;color:var(--ink-2)}
+.hdr-right{text-align:right}
+.hdr-ref{font-family:var(--fm);font-size:9.5px;color:var(--ink-3);letter-spacing:.02em}
+.pill-status{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.10em;
+  color:var(--warn);margin-top:5px;padding:3px 10px;border:1px solid var(--warn-line);
+  border-radius:2px;
 }
-.pill-enc{background:var(--abg);border-color:var(--abr);color:var(--amb)}
-.pill-ok{background:var(--gbg);border-color:var(--gbr);color:var(--grn)}
-.dot{width:5px;height:5px;border-radius:50%;background:currentColor}
-.dot.pulse{animation:bk 1.5s ease-in-out infinite}
-@keyframes bk{0%,100%{opacity:1}50%{opacity:.25}}
+.pill-status .dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.dot.pulse{animation:bk 1.6s ease-in-out infinite}
+@keyframes bk{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* ── PIPELINE (replaces identical card grid) ── */
-.pipeline-wrap{padding:20px 32px 0;border-bottom:1px solid var(--bdd)}
-.pl-label{
-  font-family:var(--fm);font-size:9px;font-weight:700;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--t3);margin-bottom:16px;
-}
-.pipeline{display:flex;align-items:stretch;gap:0;margin-bottom:20px}
-.pn{
-  flex:1;padding:14px 18px;
-  border:1px solid var(--bdd);
-  background:var(--s1);
-  position:relative;transition:border-color .2s;
-}
-.pn:first-child{border-radius:8px 0 0 8px}
-.pn:last-child{border-radius:0 8px 8px 0}
-.pn+.pn{border-left:none}
-.pn.ok{border-top-color:var(--grn)}
-.pn.enc{border-top-color:var(--amb);background:oklch(0.16 0.008 220)}
-.pn.enc::before{
-  content:'';position:absolute;inset:0;
-  background:oklch(0.74 0.15 72 / .03);pointer-events:none;
-}
-.pn-ax{
-  font-family:var(--fd);font-size:28px;font-weight:800;
-  line-height:1;letter-spacing:-.02em;margin-bottom:6px;
-}
-.pn.ok .pn-ax{color:var(--t1)}
-.pn.enc .pn-ax{color:var(--amb);font-size:34px}
-.pn-dir{font-size:10px;color:var(--t3);margin-bottom:10px;font-family:var(--fm)}
-.pn-stat{
-  font-family:var(--fd);font-size:10px;font-weight:700;
-  letter-spacing:.07em;margin-bottom:6px;
-}
-.pn.ok .pn-stat{color:var(--grn)}
-.pn.enc .pn-stat{color:var(--amb)}
-.pn-g{font-family:var(--fm);font-size:13px;font-weight:700;color:var(--t1)}
-.pn-meta{font-family:var(--fm);font-size:9px;color:var(--t3);margin-top:3px}
-.pn-enc-tag{
-  display:inline-flex;align-items:center;gap:4px;
-  font-family:var(--fm);font-size:9px;color:var(--amb);
-  background:var(--abg);border:1px solid var(--abr);
-  padding:2px 7px;border-radius:3px;margin-top:6px;
-}
-
-/* ── TABS ── */
-.tabs{
-  display:flex;padding:0 32px;
-  border-bottom:1px solid var(--bdd);
-  background:var(--bg);position:sticky;top:56px;z-index:90;
-}
+/* ── TAB STRIP ── */
+.tabs{display:flex;gap:30px;padding:0 36px;border-bottom:1px solid var(--line);background:var(--bg);position:sticky;top:64px;z-index:90}
 .tb{
-  padding:12px 16px;
-  font-family:var(--fd);font-size:12px;font-weight:700;letter-spacing:.05em;
-  color:var(--t3);background:none;border:none;
-  border-bottom:2px solid transparent;cursor:pointer;
-  transition:color .15s,border-color .15s;margin-bottom:-1px;
+  padding:14px 0;font-family:var(--fd);font-size:13px;font-weight:600;color:var(--ink-3);
+  background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;
+  letter-spacing:.01em;transition:color .15s,border-color .15s;margin-bottom:-1px;
 }
-.tb:hover{color:var(--t2)}
-.tb.on{color:var(--t1);border-bottom-color:var(--acc)}
+.tb:hover{color:var(--ink-2)}
+.tb.on{color:var(--ink-1);border-bottom-color:var(--brand)}
 
 /* ── MAIN ── */
-.main{padding:28px 32px;max-width:1440px;margin:0 auto}
+.main{max-width:1180px;margin:0 auto;padding:0 0 60px}
 .tp{display:none}.tp.on{display:block}
-.slabel{
-  font-family:var(--fm);font-size:9px;font-weight:700;
-  letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin-bottom:14px;
-}
 
-/* ── TWO COL ── */
-.twocol{display:grid;grid-template-columns:268px 1fr;gap:16px}
-.box{
-  background:var(--s1);border:1px solid var(--bdd);border-radius:8px;padding:18px;
+/* ── AXIS LEDGER (replaces 4-identical-card pattern) ── */
+.ledger-wrap{padding:30px 36px 0}
+.ledger-label{
+  font-family:var(--fm);font-size:10px;font-weight:600;letter-spacing:.10em;
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:16px;
 }
-.btitle{
-  font-family:var(--fd);font-size:10px;font-weight:700;
-  letter-spacing:.10em;text-transform:uppercase;color:var(--t3);margin-bottom:14px;
-}
+.ledger{display:grid;grid-template-columns:1fr 1fr 1.3fr 1fr;border-top:1px solid var(--ink-1);border-bottom:1px solid var(--line)}
+.lcell{padding:18px 22px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:7px}
+.lcell:last-child{border-right:none}
+.lcell.pending{background:var(--warn-bg)}
+.l-ax-num{font-family:var(--fd);font-size:30px;font-weight:800;letter-spacing:-.02em;color:var(--ink-1)}
+.lcell.pending .l-ax-num{color:var(--warn)}
+.l-ax-name{font-size:11px;color:var(--ink-3)}
+.l-stat{font-family:var(--fm);font-size:10.5px;font-weight:600;letter-spacing:.06em;display:flex;align-items:center;gap:5px}
+.l-stat.ok{color:var(--ok)}
+.l-stat.warn{color:var(--warn)}
+.l-stat::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
+.l-detail{font-family:var(--fm);font-size:10.5px;color:var(--ink-2)}
+.l-meta{font-family:var(--fm);font-size:9.5px;color:var(--ink-3)}
 
-/* ── SESSION BLOCKS ── */
-.sblock{margin-bottom:24px}
-.shdr{
-  display:flex;align-items:center;gap:10px;
-  padding-bottom:10px;margin-bottom:10px;
-  border-bottom:1px solid var(--bdd);
+/* ── PROGRESS SENTENCE (replaces hero-metric template) ── */
+.progress-line{display:flex;align-items:center;gap:14px;padding:16px 36px;border-bottom:1px solid var(--line)}
+.progress-track{flex:1;height:1px;background:var(--line-soft);position:relative}
+.progress-fill{position:absolute;left:0;top:0;height:1px;background:var(--ink-1);width:75%}
+.progress-fill::after{content:'';position:absolute;right:-3px;top:-3px;width:7px;height:7px;border-radius:50%;background:var(--ink-1)}
+.progress-text{font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+.progress-text strong{color:var(--ink-1);font-weight:700}
+
+/* ── TWO COLUMN: SYSTEM + TIMELINE ── */
+.cols{display:grid;grid-template-columns:280px 1fr;gap:48px;padding:32px 36px 36px}
+.col-label{
+  font-family:var(--fm);font-size:10px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--ink-1);
 }
+.stack-item{padding:13px 0;border-bottom:1px solid var(--line-soft)}
+.stack-item:first-child{padding-top:0}
+.stack-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.stack-name{font-size:12.5px;font-weight:700;color:var(--ink-1)}
+.stack-mass{font-family:var(--fm);font-size:11.5px;color:var(--ink-2)}
+.stack-sub{font-family:var(--fm);font-size:10px;color:var(--ink-3);margin-top:3px}
+.stack-total{display:flex;justify-content:space-between;padding-top:14px;margin-top:4px;font-family:var(--fm);font-size:11px}
+.stack-total .v{font-weight:700;color:var(--ink-1)}
+.stack-total .k{color:var(--ink-3)}
+
+.tl-row{display:grid;grid-template-columns:96px 1fr;gap:18px;padding:12px 0;border-bottom:1px solid var(--line-soft)}
+.tl-row:first-child{padding-top:0}
+.tl-date{font-family:var(--fm);font-size:10.5px;color:var(--ink-3);padding-top:2px}
+.tl-body{display:flex;flex-direction:column;gap:3px}
+.tl-head{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.tl-sess{font-family:var(--fd);font-weight:700;font-size:13px}
+.tl-result{font-family:var(--fm);font-size:10.5px;font-weight:600}
+.tl-result.ok{color:var(--ok)}
+.tl-result.fail{color:var(--fail)}
+.tl-result.pending{color:var(--warn)}
+.tl-note{font-size:12px;color:var(--ink-2)}
+.tl-ids{font-family:var(--fm);font-size:9.5px;color:var(--ink-3)}
+
+/* ── SESSION BLOCKS (Rapports de test tab) ── */
+.sblock{padding:0 36px;margin-bottom:8px}
+.sblock:first-child{padding-top:28px}
+.shdr{display:flex;align-items:center;gap:10px;padding:14px 0 10px;border-bottom:1px solid var(--ink-1)}
 .sn{
-  width:24px;height:24px;border-radius:4px;flex-shrink:0;
-  background:var(--s3);border:1px solid var(--bd);
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--fd);font-size:11px;font-weight:700;color:var(--t2);
+  width:24px;height:24px;flex-shrink:0;border:1px solid var(--ink-1);
+  display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:11px;font-weight:700;
 }
-.stit{font-family:var(--fd);font-size:15px;font-weight:600}
-.sdate{font-family:var(--fm);font-size:9px;color:var(--t3);margin-top:1px}
-.ssum{margin-left:auto;display:flex;gap:5px}
-.mb{
-  padding:2px 7px;border-radius:3px;
-  font-family:var(--fd);font-weight:700;font-size:9px;letter-spacing:.06em;
-  border:1px solid;
-}
-.mb.ok{background:var(--gbg);border-color:var(--gbr);color:var(--grn)}
-.mb.ko{background:var(--obg);border-color:var(--obr);color:var(--ora)}
+.stit{font-family:var(--fd);font-size:15px;font-weight:700}
+.sdate{font-family:var(--fm);font-size:9.5px;color:var(--ink-3);margin-top:1px}
+.ssum{margin-left:auto;display:flex;gap:14px;font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.04em}
+.ssum .ok{color:var(--ok)}
+.ssum .ko{color:var(--fail)}
 
-/* ── TEST ROWS ── */
-.trows{display:flex;flex-direction:column;gap:5px}
-.tr{background:var(--s1);border:1px solid var(--bdd);border-radius:6px;overflow:hidden}
-.trhdr{
-  display:flex;align-items:center;padding:10px 14px;
-  cursor:pointer;gap:10px;transition:background .12s;user-select:none;
-}
-.trhdr:hover,.tr.open .trhdr{background:var(--s2)}
-.tid{font-family:var(--fm);font-size:10px;font-weight:700;color:var(--t3);width:82px;flex-shrink:0}
-.tdir{font-family:var(--fd);font-size:18px;font-weight:800;width:38px;flex-shrink:0}
-.tpill{font-size:9px;padding:2px 7px;flex-shrink:0;letter-spacing:.06em}
-.tpill-ok{background:var(--gbg);border-color:var(--gbr);color:var(--grn)}
-.tpill-ko{background:var(--obg);border-color:var(--obr);color:var(--ora)}
-.tname{font-size:12px;color:var(--t2);flex:1;min-width:0}
-.tdate{font-family:var(--fm);font-size:9px;color:var(--t3);white-space:nowrap}
-.tpeak{font-family:var(--fm);font-size:12px;font-weight:700;color:var(--t1);min-width:54px;text-align:right;flex-shrink:0}
-.chevron{width:14px;height:14px;color:var(--t3);transition:transform .18s;flex-shrink:0}
+.trows{display:flex;flex-direction:column}
+.tr{border-bottom:1px solid var(--line-soft)}
+.trhdr{display:flex;align-items:center;padding:13px 0;cursor:pointer;gap:14px;transition:background .12s}
+.trhdr:hover{background:var(--surface-2)}
+.tid{font-family:var(--fm);font-size:10.5px;font-weight:700;color:var(--ink-3);width:84px;flex-shrink:0}
+.tdir{font-family:var(--fd);font-size:19px;font-weight:800;width:38px;flex-shrink:0}
+.tstat{font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.06em;width:66px;flex-shrink:0;display:flex;align-items:center;gap:5px}
+.tstat::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
+.tstat.ok{color:var(--ok)}
+.tstat.ko{color:var(--fail)}
+.tname{font-size:12px;color:var(--ink-2);flex:1;min-width:0}
+.tdate{font-family:var(--fm);font-size:10px;color:var(--ink-3);white-space:nowrap}
+.tpeak{font-family:var(--fm);font-size:12px;font-weight:700;color:var(--ink-1);min-width:58px;text-align:right;flex-shrink:0}
+.chevron{width:14px;height:14px;color:var(--ink-3);transition:transform .18s;flex-shrink:0}
 .tr.open .chevron{transform:rotate(180deg)}
-.tbody{display:none;padding:0 14px 14px;border-top:1px solid var(--bdd)}
+.tbody{display:none;padding:0 0 22px}
 .tr.open .tbody{display:block}
-.infog{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0 10px}
+.infog{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 12px}
 .ii{display:flex;flex-direction:column;gap:2px}
-.ilbl{font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3)}
-.ival{font-family:var(--fm);font-size:12px;font-weight:500;color:var(--t1)}
-.ival.fp{color:var(--ora)}
-.obs{background:var(--s2);border:1px solid var(--bd);border-radius:4px;padding:9px 12px;margin-bottom:12px}
-.obsl{font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:3px}
-.obst{font-size:12px;color:var(--t2);line-height:1.55}
-.chartg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.cbox{background:oklch(0.08 0.007 220);border:1px solid var(--bdd);border-radius:6px;padding:10px}
-.cbox.fail-box{border-color:oklch(0.68 0.18 30 / .3)}
-.clbl{font-family:var(--fm);font-size:8.5px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--t3);margin-bottom:6px}
+.ilbl{font-family:var(--fm);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.ival{font-family:var(--fm);font-size:12px;font-weight:500;color:var(--ink-1)}
+.ival.fp{color:var(--fail)}
+.obs{background:var(--surface-2);border-left:2px solid var(--ink-1);padding:9px 14px;margin-bottom:14px}
+.obsl{font-family:var(--fm);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:3px}
+.obst{font-size:12px;color:var(--ink-2);line-height:1.55}
+.chartg{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cbox{background:var(--surface);border:1px solid var(--line);padding:12px}
+.cbox.fail-box{border-color:var(--fail-line)}
+.clbl{font-family:var(--fm);font-size:8.5px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
 svg.chart{width:100%;height:auto;display:block}
 
-/* ── VERTICAL TIMELINE ── */
-.vtl{position:relative;padding-left:28px}
-.vtl::before{content:'';position:absolute;left:8px;top:8px;bottom:8px;width:1px;background:var(--bdd)}
-.vi{position:relative;margin-bottom:12px}
-.vi:last-child{margin-bottom:0}
-.vdot{position:absolute;left:-24px;top:8px;width:11px;height:11px;border-radius:50%;border:2px solid var(--bg)}
-.vcard{background:var(--s2);border:1px solid var(--bdd);border-radius:6px;padding:9px 12px}
-.vtop{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
-.vs{font-family:var(--fd);font-size:13px;font-weight:700}
-.vd{font-family:var(--fm);font-size:9px;color:var(--t3)}
-.vdesc{font-size:12px;color:var(--t2)}
-.vnote{font-family:var(--fm);font-size:9px;color:var(--t3);margin-top:2px}
-.vids{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
-.ctag{font-family:var(--fm);font-size:8px;color:var(--t3);background:var(--s3);padding:2px 5px;border-radius:2px;border:1px solid var(--bdd)}
-
-/* ── SYSTEM DIAGRAM SVG ── */
-#sys{width:100%;display:block}
-
-/* ── MODIFICATIONS (editorial, no identical columns) ── */
-.mentry{margin-bottom:22px}
-.mc{background:var(--s1);border:1px solid var(--bdd);border-radius:8px;overflow:hidden}
-.mchdr{padding:14px 20px 12px;border-bottom:1px solid var(--bdd)}
-.mcn{font-family:var(--fm);font-size:9px;font-weight:700;letter-spacing:.10em;color:var(--acc);margin-bottom:2px}
-.mctrow{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
-.mct{font-family:var(--fd);font-size:16px;font-weight:700}
-.mcd{font-family:var(--fm);font-size:9px;color:var(--t3);white-space:nowrap}
-.mcb{padding:14px 20px}
-.msp{font-family:var(--fm);font-size:9px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
-.mpb{
-  background:var(--obg);border:1px solid oklch(0.68 0.18 30 / .22);
-  border-radius:4px;padding:9px 12px;margin-bottom:14px;
-  font-size:12px;color:var(--t2);line-height:1.55;
+/* ── JOURNAL TECHNIQUE (mods) ── */
+.jwrap{padding:28px 36px 0}
+.jintro{
+  font-family:var(--fm);font-size:10px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:20px;
 }
-.msl{list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
-.msl li{display:flex;gap:10px;font-size:12px;color:var(--t2);line-height:1.5}
+.mentry{border-top:1px solid var(--ink-1);padding:18px 0 26px}
+.mchdr{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin-bottom:14px}
+.mcn{font-family:var(--fm);font-size:9.5px;font-weight:700;letter-spacing:.08em;color:var(--brand);margin-bottom:3px}
+.mct{font-family:var(--fd);font-size:17px;font-weight:700}
+.mcd{font-family:var(--fm);font-size:10px;color:var(--ink-3);white-space:nowrap}
+.mcb{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.msp{font-family:var(--fm);font-size:9.5px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--ink-3);margin-bottom:9px}
+.mpb{background:var(--fail-bg);border-left:2px solid var(--fail);padding:10px 14px;font-size:12.5px;color:var(--ink-2);line-height:1.6}
+.msl{list-style:none;display:flex;flex-direction:column;gap:8px;counter-reset:li}
+.msl li{display:flex;gap:11px;font-size:12.5px;color:var(--ink-2);line-height:1.55}
 .msl li::before{
   content:counter(li,decimal-leading-zero);counter-increment:li;
-  font-family:var(--fm);font-size:9.5px;font-weight:700;color:var(--acc);
-  flex-shrink:0;padding-top:2px;min-width:20px;
+  font-family:var(--fm);font-size:9.5px;font-weight:700;color:var(--brand);flex-shrink:0;padding-top:2px;min-width:20px;
 }
-.msl{counter-reset:li}
 .mcf{
-  padding:9px 20px;
-  background:var(--s2);border-top:1px solid var(--bdd);
-  font-family:var(--fm);font-size:9px;color:var(--t3);
-  display:flex;align-items:center;gap:8px;
+  margin-top:16px;padding-top:12px;border-top:1px solid var(--line-soft);
+  font-family:var(--fm);font-size:10px;color:var(--ink-3);display:flex;align-items:center;gap:10px;flex-wrap:wrap;
 }
-.mcf-next{color:var(--t2)}
-.mcf-pend{color:var(--amb)}
+.mcf-next{color:var(--ink-2);font-weight:600}
+.mcf-pend{color:var(--warn);font-weight:600}
 
 /* ── ANIMATIONS ── */
 @keyframes fup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .ani{animation:fup .3s ease-out forwards;opacity:0}
-.ani:nth-child(1){animation-delay:.00s}.ani:nth-child(2){animation-delay:.04s}
-.ani:nth-child(3){animation-delay:.08s}.ani:nth-child(4){animation-delay:.12s}
-.ani:nth-child(5){animation-delay:.16s}.ani:nth-child(6){animation-delay:.20s}
 
-/* ── RESPONSIVE ── */
-@media(max-width:1100px){.twocol{grid-template-columns:1fr}}
-@media(max-width:900px){.pipeline{flex-wrap:wrap}.pn{flex:1 1 45%;border-radius:0!important}.pn+.pn{border-left:1px solid var(--bdd)}.chartg{grid-template-columns:1fr}}
-@media(max-width:640px){.main{padding:18px 16px}.hdr{padding:0 16px}.pipeline-wrap{padding:16px 16px 0}.tabs{padding:0 16px}.infog{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1000px){.cols{grid-template-columns:1fr}}
+@media(max-width:880px){.ledger{grid-template-columns:1fr 1fr}.lcell:nth-child(2){border-right:none}.chartg{grid-template-columns:1fr}.mcb{grid-template-columns:1fr}}
+@media(max-width:640px){.hdr{padding:0 18px}.tabs{padding:0 18px}.ledger-wrap{padding:24px 18px 0}.cols{padding:28px 18px}.sblock,.jwrap{padding:0 18px}.infog{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="hdr">
   <div class="hdr-left">
     <div class="logo">RTS <em>CHAPUIS</em></div>
@@ -285,47 +230,11 @@ svg.chart{width:100%;height:auto;display:block}
     <div class="proj">Certification EN 1789+A2 · Cabbri V2 + EpiShuttle</div>
   </div>
   <div class="hdr-right">
-    <span class="hdr-ref">ARCSAS2503933 / ARCSAS2601836 · UTAC V. NORTURE</span>
-    <span class="pill pill-enc"><span class="dot pulse"></span>EN COURS</span>
+    <div class="hdr-ref">ARCSAS2503933 / ARCSAS2601836 · UTAC V. NORTURE</div>
+    <div class="pill-status"><span class="dot pulse"></span>CAMPAGNE EN COURS</div>
   </div>
 </header>
 
-<!-- PIPELINE -->
-<div class="pipeline-wrap">
-  <div class="pl-label">Séquence des tirs requis — 4 axes · 10g · NF EN 1789+A2</div>
-  <div class="pipeline">
-    <div class="pn ok">
-      <div class="pn-ax">X<sup style="font-size:.5em;vertical-align:super">+</sup></div>
-      <div class="pn-dir">Frontal · Impact avant</div>
-      <div class="pn-stat">VALIDÉ</div>
-      <div class="pn-g">10,52 g</div>
-      <div class="pn-meta">CINV_2749 · 19.02.2026</div>
-    </div>
-    <div class="pn ok">
-      <div class="pn-ax">X<sup style="font-size:.5em;vertical-align:super">−</sup></div>
-      <div class="pn-dir">Arrière · Impact arrière</div>
-      <div class="pn-stat">VALIDÉ</div>
-      <div class="pn-g">10,31 g</div>
-      <div class="pn-meta">CINV_2748 · 19.02.2026</div>
-    </div>
-    <div class="pn enc">
-      <div class="pn-ax">Y</div>
-      <div class="pn-dir">Latéral · Impact de côté</div>
-      <div class="pn-stat">EN COURS <span class="dot pulse" style="width:5px;height:5px;display:inline-block;border-radius:50%;background:var(--amb);margin-left:4px;vertical-align:middle"></span></div>
-      <div class="pn-g" style="color:var(--amb)">3 tentatives</div>
-      <div class="pn-enc-tag">Prochain tir PENDING</div>
-    </div>
-    <div class="pn ok">
-      <div class="pn-ax">Z</div>
-      <div class="pn-dir">Vertical · Arrachement</div>
-      <div class="pn-stat">VALIDÉ</div>
-      <div class="pn-g">10,49 g</div>
-      <div class="pn-meta">CINV_2751 · 20.02.2026</div>
-    </div>
-  </div>
-</div>
-
-<!-- TABS -->
 <nav class="tabs">
   <button class="tb on" onclick="tab('g',this)">Vue d'ensemble</button>
   <button class="tb" onclick="tab('t',this)">Rapports de test</button>
@@ -336,9 +245,55 @@ svg.chart{width:100%;height:auto;display:block}
 
   <!-- VUE D'ENSEMBLE -->
   <div class="tp on" id="tab-g">
-    <div class="twocol" style="margin-bottom:0">
-      <div class="box ani"><div class="btitle">Architecture du système testé</div><svg id="sys" viewBox="0 0 252 388"></svg></div>
-      <div class="box ani"><div class="btitle">Chronologie de la campagne</div><div class="vtl" id="vtl"></div></div>
+    <div class="ledger-wrap">
+      <div class="ledger-label">Séquence des 4 tirs requis — Norme EN 1789+A2, 10g</div>
+      <div class="ledger">
+        <div class="lcell">
+          <div class="l-ax-num">X+</div>
+          <div class="l-ax-name">Frontal · Impact avant</div>
+          <div class="l-stat ok">VALIDÉ</div>
+          <div class="l-detail">10,52 g</div>
+          <div class="l-meta">CINV_2749 · 19.02.2026</div>
+        </div>
+        <div class="lcell">
+          <div class="l-ax-num">X−</div>
+          <div class="l-ax-name">Arrière · Impact arrière</div>
+          <div class="l-stat ok">VALIDÉ</div>
+          <div class="l-detail">10,31 g</div>
+          <div class="l-meta">CINV_2748 · 19.02.2026</div>
+        </div>
+        <div class="lcell pending">
+          <div class="l-ax-num">Y</div>
+          <div class="l-ax-name">Latéral · Impact de côté</div>
+          <div class="l-stat warn">EN COURS — 3 TENTATIVES</div>
+          <div class="l-detail">Prochain tir pending</div>
+          <div class="l-meta">Greenlight UTAC en attente</div>
+        </div>
+        <div class="lcell">
+          <div class="l-ax-num">Z</div>
+          <div class="l-ax-name">Vertical · Arrachement</div>
+          <div class="l-stat ok">VALIDÉ</div>
+          <div class="l-detail">10,49 g</div>
+          <div class="l-meta">CINV_2751 · 20.02.2026</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-line">
+      <div class="progress-text"><strong>3 / 4</strong> axes validés</div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+      <div class="progress-text">25% restant — axe Y</div>
+    </div>
+
+    <div class="cols">
+      <div>
+        <div class="col-label">Architecture du système testé</div>
+        <div id="system"></div>
+      </div>
+      <div>
+        <div class="col-label">Chronologie de la campagne</div>
+        <div id="vtl"></div>
+      </div>
     </div>
   </div>
 
@@ -349,8 +304,10 @@ svg.chart{width:100%;height:auto;display:block}
 
   <!-- JOURNAL TECHNIQUE -->
   <div class="tp" id="tab-j">
-    <p class="slabel">Évolutions techniques — 4 cycles d'itération suite aux incidents</p>
-    <div id="mods"></div>
+    <div class="jwrap">
+      <div class="jintro">Évolutions techniques — 4 cycles d'itération suite aux incidents</div>
+      <div id="mods"></div>
+    </div>
   </div>
 
 </main>
@@ -361,64 +318,14 @@ svg.chart{width:100%;height:auto;display:block}
 // ─────────────────────────────────────────────────────────────
 const NS='http://www.w3.org/2000/svg';
 function el(t,a={}){const e=document.createElementNS(NS,t);for(const[k,v]of Object.entries(a))e.setAttribute(k,v);return e}
-function tx(t,a,txt){const e=el('text',a);e.textContent=txt;return e}
+function tx(t,a,txt){const e=el(t,a);e.textContent=txt;return e}
 
 // ─────────────────────────────────────────────────────────────
-// DETERMINISTIC NOISE (seeded RNG)
-// ─────────────────────────────────────────────────────────────
-function rng(seed){let s=seed>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/0xFFFFFFFF}}
-
-// ─────────────────────────────────────────────────────────────
-// PULSE GENERATION
-// Corridor: upper (0,12)→(90,12)→(150,0); lower (10,0)→(20,8)→(70,8)→(80,0)
-// All test pulses are within the corridor (sled behaved correctly).
-// ─────────────────────────────────────────────────────────────
-function genAcc(peakG, seed) {
-  const r = rng(seed);
-  return Array.from({length:171}, (_, i) => {
-    const t = i - 20;
-    const n = (r() - .5) * 0.22;
-    let g = 0;
-    if (t >= -8 && t < 20) {
-      // Fast rise: 0 → peakG
-      const f = (t + 8) / 28;
-      g = peakG * Math.pow(f, 0.52) + n * 0.5;
-    } else if (t >= 20 && t <= 70) {
-      // Plateau near peakG with gentle wave
-      const w = Math.sin((t - 20) / 50 * Math.PI) * 0.035;
-      g = peakG * (1 + w) + n;
-    } else if (t > 70 && t <= 84) {
-      // Rapid fall
-      const f = (t - 70) / 14;
-      g = peakG * (1 - Math.pow(f, 0.62)) + n * 0.4;
-    } else if (t < -8) {
-      g = Math.abs(n) * 0.1;
-    } else {
-      g = Math.abs(n) * 0.05;
-    }
-    return { t, g: Math.max(0, parseFloat(g.toFixed(3))) };
-  });
-}
-
-function genVel(vmax, seed) {
-  const r = rng(seed);
-  return Array.from({length:141}, (_, i) => {
-    const t = i;
-    const n = (r() - .5) * 0.28;
-    let v;
-    if (t <= 3) v = vmax + n * 0.04;
-    else if (t <= 76) { const f = (t-3)/73; v = vmax * (1 - f * f * 0.95) + n; }
-    else { const f = (t-76)/64; v = vmax * 0.05 * Math.exp(-f * 5) + Math.abs(n) * 0.08; }
-    return { t, v: Math.max(0, parseFloat(v.toFixed(2))) };
-  });
-}
-
-// ─────────────────────────────────────────────────────────────
-// REAL MEASURED DATA — CINV_2453 (extracted from raw UTAC .MME source file)
+// REAL MEASURED DATA — extracted from raw UTAC .MME source files
 // Acc_CFC60 = average(Sled Front Left Acc X, Sled Front Right Acc X), CFC60 filter
 // (4-pole phaseless Butterworth, -3dB @ 100Hz per SAE J211 / ISO 6487)
 // Velocity = integral of raw acceleration (g0=9.80665 m/s²), converted to km/h
-// Validated against UTAC report: peak 10.79g (Δ0.02g before fit), Vmax 31.06 km/h (Δ0.01)
+// All curves rescaled <0.4% to match official UTAC-reported peak values exactly.
 // ─────────────────────────────────────────────────────────────
 const CINV_2453_ACC = [{t:-20,g:-0.027},{t:-19,g:-0.027},{t:-18,g:-0.025},{t:-17,g:-0.02},{t:-16,g:-0.013},{t:-15,g:-0.003},{t:-14,g:0.006},{t:-13,g:0.011},{t:-12,g:0.012},{t:-11,g:0.012},{t:-10,g:0.017},{t:-9,g:0.027},{t:-8,g:0.043},{t:-7,g:0.065},{t:-6,g:0.094},{t:-5,g:0.125},{t:-4,g:0.144},{t:-3,g:0.16},{t:-2,g:0.209},{t:-1,g:0.342},{t:0,g:0.57},{t:1,g:0.897},{t:2,g:1.332},{t:3,g:1.906},{t:4,g:2.631},{t:5,g:3.473},{t:6,g:4.379},{t:7,g:5.286},{t:8,g:6.148},{t:9,g:6.935},{t:10,g:7.635},{t:11,g:8.261},{t:12,g:8.817},{t:13,g:9.296},{t:14,g:9.683},{t:15,g:9.96},{t:16,g:10.128},{t:17,g:10.216},{t:18,g:10.241},{t:19,g:10.232},{t:20,g:10.209},{t:21,g:10.192},{t:22,g:10.17},{t:23,g:10.132},{t:24,g:10.083},{t:25,g:10.027},{t:26,g:9.96},{t:27,g:9.898},{t:28,g:9.856},{t:29,g:9.844},{t:30,g:9.849},{t:31,g:9.866},{t:32,g:9.896},{t:33,g:9.928},{t:34,g:9.951},{t:35,g:9.965},{t:36,g:9.979},{t:37,g:9.992},{t:38,g:10.0},{t:39,g:10.006},{t:40,g:10.003},{t:41,g:9.985},{t:42,g:9.963},{t:43,g:9.953},{t:44,g:9.955},{t:45,g:9.963},{t:46,g:9.973},{t:47,g:9.995},{t:48,g:10.034},{t:49,g:10.094},{t:50,g:10.162},{t:51,g:10.216},{t:52,g:10.253},{t:53,g:10.287},{t:54,g:10.328},{t:55,g:10.374},{t:56,g:10.424},{t:57,g:10.494},{t:58,g:10.59},{t:59,g:10.687},{t:60,g:10.755},{t:61,g:10.788},{t:62,g:10.79},{t:63,g:10.777},{t:64,g:10.761},{t:65,g:10.746},{t:66,g:10.726},{t:67,g:10.693},{t:68,g:10.651},{t:69,g:10.602},{t:70,g:10.542},{t:71,g:10.474},{t:72,g:10.405},{t:73,g:10.327},{t:74,g:10.233},{t:75,g:10.125},{t:76,g:10.012},{t:77,g:9.901},{t:78,g:9.798},{t:79,g:9.697},{t:80,g:9.58},{t:81,g:9.435},{t:82,g:9.257},{t:83,g:9.045},{t:84,g:8.79},{t:85,g:8.492},{t:86,g:8.157},{t:87,g:7.797},{t:88,g:7.405},{t:89,g:6.981},{t:90,g:6.53},{t:91,g:6.06},{t:92,g:5.581},{t:93,g:5.1},{t:94,g:4.624},{t:95,g:4.186},{t:96,g:3.814},{t:97,g:3.5},{t:98,g:3.22},{t:99,g:2.936},{t:100,g:2.63},{t:101,g:2.292},{t:102,g:1.931},{t:103,g:1.554},{t:104,g:1.157},{t:105,g:0.757},{t:106,g:0.392},{t:107,g:0.071},{t:108,g:-0.196},{t:109,g:-0.412},{t:110,g:-0.576},{t:111,g:-0.686},{t:112,g:-0.741},{t:113,g:-0.752},{t:114,g:-0.734},{t:115,g:-0.686},{t:116,g:-0.611},{t:117,g:-0.527},{t:118,g:-0.462},{t:119,g:-0.418},{t:120,g:-0.365},{t:121,g:-0.308},{t:122,g:-0.262},{t:123,g:-0.229},{t:124,g:-0.209},{t:125,g:-0.194},{t:126,g:-0.187},{t:127,g:-0.194},{t:128,g:-0.221},{t:129,g:-0.251},{t:130,g:-0.268},{t:131,g:-0.274},{t:132,g:-0.28},{t:133,g:-0.294},{t:134,g:-0.31},{t:135,g:-0.316},{t:136,g:-0.314},{t:137,g:-0.308},{t:138,g:-0.291},{t:139,g:-0.273},{t:140,g:-0.266},{t:141,g:-0.269},{t:142,g:-0.287},{t:143,g:-0.323},{t:144,g:-0.375},{t:145,g:-0.427},{t:146,g:-0.46},{t:147,g:-0.457},{t:148,g:-0.409},{t:149,g:-0.328},{t:150,g:-0.221}];
 const CINV_2453_VEL = [{t:0,v:-0.02},{t:1,v:0.01},{t:2,v:0.05},{t:3,v:0.1},{t:4,v:0.17},{t:5,v:0.28},{t:6,v:0.41},{t:7,v:0.58},{t:8,v:0.79},{t:9,v:1.03},{t:10,v:1.29},{t:11,v:1.57},{t:12,v:1.86},{t:13,v:2.18},{t:14,v:2.52},{t:15,v:2.87},{t:16,v:3.23},{t:17,v:3.59},{t:18,v:3.94},{t:19,v:4.31},{t:20,v:4.67},{t:21,v:5.02},{t:22,v:5.38},{t:23,v:5.74},{t:24,v:6.1},{t:25,v:6.45},{t:26,v:6.81},{t:27,v:7.16},{t:28,v:7.5},{t:29,v:7.85},{t:30,v:8.19},{t:31,v:8.54},{t:32,v:8.88},{t:33,v:9.24},{t:34,v:9.59},{t:35,v:9.94},{t:36,v:10.29},{t:37,v:10.64},{t:38,v:11.0},{t:39,v:11.35},{t:40,v:11.7},{t:41,v:12.06},{t:42,v:12.41},{t:43,v:12.75},{t:44,v:13.1},{t:45,v:13.46},{t:46,v:13.81},{t:47,v:14.16},{t:48,v:14.52},{t:49,v:14.86},{t:50,v:15.22},{t:51,v:15.6},{t:52,v:15.96},{t:53,v:16.32},{t:54,v:16.68},{t:55,v:17.05},{t:56,v:17.42},{t:57,v:17.78},{t:58,v:18.14},{t:59,v:18.52},{t:60,v:18.9},{t:61,v:19.29},{t:62,v:19.67},{t:63,v:20.05},{t:64,v:20.42},{t:65,v:20.8},{t:66,v:21.18},{t:67,v:21.56},{t:68,v:21.93},{t:69,v:22.31},{t:70,v:22.68},{t:71,v:23.05},{t:72,v:23.42},{t:73,v:23.79},{t:74,v:24.15},{t:75,v:24.51},{t:76,v:24.86},{t:77,v:25.21},{t:78,v:25.55},{t:79,v:25.9},{t:80,v:26.24},{t:81,v:26.58},{t:82,v:26.91},{t:83,v:27.23},{t:84,v:27.54},{t:85,v:27.85},{t:86,v:28.14},{t:87,v:28.42},{t:88,v:28.69},{t:89,v:28.95},{t:90,v:29.19},{t:91,v:29.41},{t:92,v:29.61},{t:93,v:29.8},{t:94,v:29.98},{t:95,v:30.13},{t:96,v:30.26},{t:97,v:30.39},{t:98,v:30.5},{t:99,v:30.62},{t:100,v:30.72},{t:101,v:30.81},{t:102,v:30.88},{t:103,v:30.94},{t:104,v:31.0},{t:105,v:31.03},{t:106,v:31.04},{t:107,v:31.06},{t:108,v:31.05},{t:109,v:31.04},{t:110,v:31.03},{t:111,v:31.0},{t:112,v:30.97},{t:113,v:30.95},{t:114,v:30.92},{t:115,v:30.89},{t:116,v:30.86},{t:117,v:30.85},{t:118,v:30.84},{t:119,v:30.82},{t:120,v:30.8},{t:121,v:30.79},{t:122,v:30.79},{t:123,v:30.77},{t:124,v:30.77},{t:125,v:30.76},{t:126,v:30.75},{t:127,v:30.75},{t:128,v:30.75},{t:129,v:30.73},{t:130,v:30.72},{t:131,v:30.71},{t:132,v:30.7},{t:133,v:30.7},{t:134,v:30.68},{t:135,v:30.67},{t:136,v:30.66},{t:137,v:30.65},{t:138,v:30.63},{t:139,v:30.63},{t:140,v:30.62}];
@@ -435,6 +342,7 @@ const CINV_2773_ACC = [{t:-20,g:-0.008},{t:-19,g:-0.009},{t:-18,g:-0.011},{t:-17
 const CINV_2773_VEL = [{t:0,v:0.05},{t:1,v:0.09},{t:2,v:0.15},{t:3,v:0.26},{t:4,v:0.4},{t:5,v:0.57},{t:6,v:0.78},{t:7,v:0.99},{t:8,v:1.22},{t:9,v:1.47},{t:10,v:1.74},{t:11,v:2.04},{t:12,v:2.36},{t:13,v:2.7},{t:14,v:3.06},{t:15,v:3.45},{t:16,v:3.81},{t:17,v:4.21},{t:18,v:4.6},{t:19,v:4.99},{t:20,v:5.36},{t:21,v:5.75},{t:22,v:6.12},{t:23,v:6.5},{t:24,v:6.87},{t:25,v:7.26},{t:26,v:7.62},{t:27,v:8.0},{t:28,v:8.37},{t:29,v:8.75},{t:30,v:9.12},{t:31,v:9.49},{t:32,v:9.85},{t:33,v:10.24},{t:34,v:10.59},{t:35,v:10.97},{t:36,v:11.33},{t:37,v:11.71},{t:38,v:12.06},{t:39,v:12.43},{t:40,v:12.81},{t:41,v:13.16},{t:42,v:13.53},{t:43,v:13.89},{t:44,v:14.25},{t:45,v:14.62},{t:46,v:14.96},{t:47,v:15.33},{t:48,v:15.68},{t:49,v:16.05},{t:50,v:16.4},{t:51,v:16.76},{t:52,v:17.11},{t:53,v:17.46},{t:54,v:17.83},{t:55,v:18.18},{t:56,v:18.54},{t:57,v:18.89},{t:58,v:19.25},{t:59,v:19.6},{t:60,v:19.95},{t:61,v:20.3},{t:62,v:20.65},{t:63,v:21.0},{t:64,v:21.36},{t:65,v:21.72},{t:66,v:22.08},{t:67,v:22.43},{t:68,v:22.8},{t:69,v:23.17},{t:70,v:23.51},{t:71,v:23.85},{t:72,v:24.19},{t:73,v:24.55},{t:74,v:24.91},{t:75,v:25.3},{t:76,v:25.6},{t:77,v:25.99},{t:78,v:26.34},{t:79,v:26.67},{t:80,v:27.0},{t:81,v:27.37},{t:82,v:27.69},{t:83,v:27.99},{t:84,v:28.29},{t:85,v:28.59},{t:86,v:28.84},{t:87,v:29.11},{t:88,v:29.38},{t:89,v:29.59},{t:90,v:29.84},{t:91,v:30.06},{t:92,v:30.27},{t:93,v:30.45},{t:94,v:30.66},{t:95,v:30.85},{t:96,v:31.03},{t:97,v:31.11},{t:98,v:31.24},{t:99,v:31.38},{t:100,v:31.54},{t:101,v:31.6},{t:102,v:31.7},{t:103,v:31.79},{t:104,v:31.89},{t:105,v:31.9},{t:106,v:31.93},{t:107,v:31.99},{t:108,v:32.02},{t:109,v:31.96},{t:110,v:31.97},{t:111,v:31.95},{t:112,v:31.94},{t:113,v:31.9},{t:114,v:31.88},{t:115,v:31.82},{t:116,v:31.8},{t:117,v:31.8},{t:118,v:31.76},{t:119,v:31.73},{t:120,v:31.72},{t:121,v:31.66},{t:122,v:31.66},{t:123,v:31.63},{t:124,v:31.61},{t:125,v:31.59},{t:126,v:31.56},{t:127,v:31.55},{t:128,v:31.53},{t:129,v:31.51},{t:130,v:31.49},{t:131,v:31.5},{t:132,v:31.49},{t:133,v:31.46},{t:134,v:31.47},{t:135,v:31.45},{t:136,v:31.44},{t:137,v:31.39},{t:138,v:31.39},{t:139,v:31.37},{t:140,v:31.34}];
 const CINV_2875_ACC = [{t:-20,g:0.004},{t:-19,g:0.003},{t:-18,g:0.002},{t:-17,g:0.002},{t:-16,g:0.001},{t:-15,g:0.0},{t:-14,g:-0.001},{t:-13,g:-0.001},{t:-12,g:-0.002},{t:-11,g:-0.003},{t:-10,g:-0.003},{t:-9,g:-0.003},{t:-8,g:-0.001},{t:-7,g:0.003},{t:-6,g:0.01},{t:-5,g:0.02},{t:-4,g:0.035},{t:-3,g:0.055},{t:-2,g:0.102},{t:-1,g:0.219},{t:0,g:0.446},{t:1,g:0.811},{t:2,g:1.332},{t:3,g:1.987},{t:4,g:2.736},{t:5,g:3.544},{t:6,g:4.371},{t:7,g:5.173},{t:8,g:5.925},{t:9,g:6.641},{t:10,g:7.338},{t:11,g:8.011},{t:12,g:8.64},{t:13,g:9.192},{t:14,g:9.648},{t:15,g:9.985},{t:16,g:10.193},{t:17,g:10.284},{t:18,g:10.3},{t:19,g:10.292},{t:20,g:10.272},{t:21,g:10.241},{t:22,g:10.209},{t:23,g:10.19},{t:24,g:10.179},{t:25,g:10.161},{t:26,g:10.13},{t:27,g:10.09},{t:28,g:10.05},{t:29,g:10.017},{t:30,g:9.99},{t:31,g:9.968},{t:32,g:9.948},{t:33,g:9.926},{t:34,g:9.907},{t:35,g:9.897},{t:36,g:9.894},{t:37,g:9.895},{t:38,g:9.897},{t:39,g:9.901},{t:40,g:9.906},{t:41,g:9.913},{t:42,g:9.921},{t:43,g:9.926},{t:44,g:9.927},{t:45,g:9.924},{t:46,g:9.91},{t:47,g:9.896},{t:48,g:9.901},{t:49,g:9.917},{t:50,g:9.928},{t:51,g:9.935},{t:52,g:9.953},{t:53,g:9.981},{t:54,g:10.009},{t:55,g:10.029},{t:56,g:10.039},{t:57,g:10.036},{t:58,g:10.022},{t:59,g:10.005},{t:60,g:9.994},{t:61,g:9.986},{t:62,g:9.973},{t:63,g:9.952},{t:64,g:9.942},{t:65,g:9.953},{t:66,g:9.966},{t:67,g:9.961},{t:68,g:9.944},{t:69,g:9.931},{t:70,g:9.922},{t:71,g:9.911},{t:72,g:9.901},{t:73,g:9.9},{t:74,g:9.909},{t:75,g:9.931},{t:76,g:9.949},{t:77,g:9.926},{t:78,g:9.862},{t:79,g:9.777},{t:80,g:9.66},{t:81,g:9.491},{t:82,g:9.283},{t:83,g:9.064},{t:84,g:8.81},{t:85,g:8.5},{t:86,g:8.184},{t:87,g:7.89},{t:88,g:7.574},{t:89,g:7.225},{t:90,g:6.863},{t:91,g:6.502},{t:92,g:6.147},{t:93,g:5.793},{t:94,g:5.453},{t:95,g:5.12},{t:96,g:4.764},{t:97,g:4.39},{t:98,g:4.02},{t:99,g:3.661},{t:100,g:3.307},{t:101,g:2.931},{t:102,g:2.542},{t:103,g:2.154},{t:104,g:1.748},{t:105,g:1.315},{t:106,g:0.879},{t:107,g:0.48},{t:108,g:0.141},{t:109,g:-0.161},{t:110,g:-0.414},{t:111,g:-0.585},{t:112,g:-0.676},{t:113,g:-0.715},{t:114,g:-0.721},{t:115,g:-0.709},{t:116,g:-0.681},{t:117,g:-0.636},{t:118,g:-0.587},{t:119,g:-0.551},{t:120,g:-0.539},{t:121,g:-0.541},{t:122,g:-0.535},{t:123,g:-0.515},{t:124,g:-0.492},{t:125,g:-0.478},{t:126,g:-0.466},{t:127,g:-0.454},{t:128,g:-0.44},{t:129,g:-0.411},{t:130,g:-0.389},{t:131,g:-0.396},{t:132,g:-0.408},{t:133,g:-0.405},{t:134,g:-0.402},{t:135,g:-0.437},{t:136,g:-0.498},{t:137,g:-0.545},{t:138,g:-0.555},{t:139,g:-0.553},{t:140,g:-0.558},{t:141,g:-0.565},{t:142,g:-0.551},{t:143,g:-0.506},{t:144,g:-0.448},{t:145,g:-0.405},{t:146,g:-0.377},{t:147,g:-0.337},{t:148,g:-0.279},{t:149,g:-0.208},{t:150,g:-0.137}];
 const CINV_2875_VEL = [{t:0,v:0.04},{t:1,v:0.05},{t:2,v:0.08},{t:3,v:0.14},{t:4,v:0.23},{t:5,v:0.33},{t:6,v:0.48},{t:7,v:0.65},{t:8,v:0.85},{t:9,v:1.07},{t:10,v:1.31},{t:11,v:1.58},{t:12,v:1.87},{t:13,v:2.19},{t:14,v:2.53},{t:15,v:2.88},{t:16,v:3.24},{t:17,v:3.61},{t:18,v:3.96},{t:19,v:4.32},{t:20,v:4.68},{t:21,v:5.05},{t:22,v:5.41},{t:23,v:5.76},{t:24,v:6.12},{t:25,v:6.48},{t:26,v:6.84},{t:27,v:7.2},{t:28,v:7.55},{t:29,v:7.9},{t:30,v:8.26},{t:31,v:8.61},{t:32,v:8.96},{t:33,v:9.31},{t:34,v:9.66},{t:35,v:10.01},{t:36,v:10.36},{t:37,v:10.7},{t:38,v:11.05},{t:39,v:11.4},{t:40,v:11.75},{t:41,v:12.1},{t:42,v:12.45},{t:43,v:12.8},{t:44,v:13.15},{t:45,v:13.5},{t:46,v:13.86},{t:47,v:14.2},{t:48,v:14.55},{t:49,v:14.89},{t:50,v:15.25},{t:51,v:15.6},{t:52,v:15.95},{t:53,v:16.3},{t:54,v:16.65},{t:55,v:17.01},{t:56,v:17.36},{t:57,v:17.72},{t:58,v:18.07},{t:59,v:18.42},{t:60,v:18.77},{t:61,v:19.12},{t:62,v:19.48},{t:63,v:19.84},{t:64,v:20.18},{t:65,v:20.52},{t:66,v:20.88},{t:67,v:21.24},{t:68,v:21.59},{t:69,v:21.93},{t:70,v:22.29},{t:71,v:22.63},{t:72,v:22.98},{t:73,v:23.33},{t:74,v:23.68},{t:75,v:24.02},{t:76,v:24.37},{t:77,v:24.74},{t:78,v:25.08},{t:79,v:25.41},{t:80,v:25.77},{t:81,v:26.12},{t:82,v:26.43},{t:83,v:26.75},{t:84,v:27.08},{t:85,v:27.39},{t:86,v:27.68},{t:87,v:27.94},{t:88,v:28.24},{t:89,v:28.5},{t:90,v:28.75},{t:91,v:28.98},{t:92,v:29.2},{t:93,v:29.42},{t:94,v:29.6},{t:95,v:29.79},{t:96,v:29.97},{t:97,v:30.13},{t:98,v:30.28},{t:99,v:30.41},{t:100,v:30.54},{t:101,v:30.65},{t:102,v:30.74},{t:103,v:30.82},{t:104,v:30.9},{t:105,v:30.96},{t:106,v:31.0},{t:107,v:31.01},{t:108,v:31.01},{t:109,v:31.04},{t:110,v:31.01},{t:111,v:30.99},{t:112,v:30.97},{t:113,v:30.94},{t:114,v:30.92},{t:115,v:30.9},{t:116,v:30.87},{t:117,v:30.85},{t:118,v:30.82},{t:119,v:30.81},{t:120,v:30.79},{t:121,v:30.78},{t:122,v:30.75},{t:123,v:30.73},{t:124,v:30.71},{t:125,v:30.7},{t:126,v:30.68},{t:127,v:30.67},{t:128,v:30.65},{t:129,v:30.62},{t:130,v:30.62},{t:131,v:30.61},{t:132,v:30.59},{t:133,v:30.57},{t:134,v:30.56},{t:135,v:30.55},{t:136,v:30.54},{t:137,v:30.51},{t:138,v:30.49},{t:139,v:30.47},{t:140,v:30.46}];
+
 
 // ─────────────────────────────────────────────────────────────
 // TEST DATA (values from UTAC PDF reports)
@@ -505,20 +413,17 @@ const MODS = [
 ];
 
 // ─────────────────────────────────────────────────────────────
-// CHART ENGINE
+// CHART ENGINE (light paper theme)
 // ─────────────────────────────────────────────────────────────
 const CW=580, CH=195, M={t:22,r:16,b:38,l:44};
 const IW = CW - M.l - M.r;
 const IH = CH - M.t - M.b;
 
-// Scale functions — these accept raw numbers (t in ms, g or v in units)
 const aX = t  => M.l + (t + 25) / 180 * IW;
 const aY = g  => M.t + IH - (g + 0.5) / 15.5 * IH;
 const vX = t  => M.l + t / 142 * IW;
 const vY = v  => M.t + IH - v / 43 * IH;
 
-// ── BUG FIX: xf/yf receive raw numbers directly from pts2d(…, aX, aY, key) ──
-// pts2d calls xf(p.t) and yf(p[key]) — both are numbers, matching aX/aY/vX/vY signatures.
 function pts2d(pts, xf, yf, key) {
   let d = '', first = true;
   for (const p of pts) {
@@ -541,20 +446,16 @@ function animPath(path, dur=1100) {
   const step = ts => {
     if (!start) start = ts;
     const p = Math.min((ts - start) / dur, 1);
-    const e = 1 - Math.pow(1 - p, 4); // ease-out-quart
+    const e = 1 - Math.pow(1 - p, 4);
     path.style.strokeDashoffset = len * (1 - e);
     if (p < 1) requestAnimationFrame(step);
   };
   requestAnimationFrame(step);
 }
 
-function getColor(test, css=false) {
-  // Returns CSS color for the test's direction
-  const map = {
-    'X+': 'var(--cx)', 'X−': 'var(--cx)',
-    'Y': 'var(--cy)', 'Z': 'var(--cz)',
-  };
-  return map[test.dir] || 'var(--cx)';
+function getColor(test) {
+  const map = { 'X+': 'oklch(0.46 0.13 232)', 'X−': 'oklch(0.46 0.13 232)', 'Y': 'oklch(0.58 0.135 68)', 'Z': 'oklch(0.47 0.14 296)' };
+  return map[test.dir] || 'oklch(0.46 0.13 232)';
 }
 
 function renderAcc(container, test) {
@@ -562,23 +463,20 @@ function renderAcc(container, test) {
   const isPass = test.status === 'VALIDE';
   const col = getColor(test);
 
-  // Background
-  svg.appendChild(el('rect', { width:CW, height:CH, fill:'oklch(0.08 0.007 220)' }));
+  svg.appendChild(el('rect', { width:CW, height:CH, fill:'oklch(0.995 0.003 50)' }));
 
-  // Grid — horizontal
   [0,4,8,12].forEach(g => {
     const y = aY(g);
-    svg.appendChild(el('line', {x1:M.l,x2:M.l+IW,y1:y,y2:y,stroke:'oklch(0.20 0.006 220)','stroke-width':'1'}));
-    const t = svg.appendChild(tx('text',{x:M.l-5,y:y+3.5,'text-anchor':'end','font-family':'Red Hat Mono','font-size':'8',fill:'oklch(0.38 0.007 220)'},g+'g'));
+    svg.appendChild(el('line', {x1:M.l,x2:M.l+IW,y1:y,y2:y,stroke:'oklch(0.90 0.007 40)','stroke-width':'1'}));
+    svg.appendChild(tx('text',{x:M.l-5,y:y+3.5,'text-anchor':'end','font-family':'IBM Plex Mono','font-size':'8',fill:'oklch(0.64 0.010 35)'},g+'g'));
   });
-  // Grid — vertical
   [-20,0,20,40,60,80,100,140].forEach(t => {
     const x = aX(t);
-    svg.appendChild(el('line', {x1:x,x2:x,y1:M.t,y2:M.t+IH,stroke:'oklch(0.20 0.006 220)','stroke-width':'1'}));
-    svg.appendChild(tx('text',{x,y:CH-M.b+12,'text-anchor':'middle','font-family':'Red Hat Mono','font-size':'8',fill:'oklch(0.38 0.007 220)'},t+'ms'));
+    svg.appendChild(el('line', {x1:x,x2:x,y1:M.t,y2:M.t+IH,stroke:'oklch(0.90 0.007 40)','stroke-width':'1'}));
+    svg.appendChild(tx('text',{x,y:CH-M.b+12,'text-anchor':'middle','font-family':'IBM Plex Mono','font-size':'8',fill:'oklch(0.64 0.010 35)'},t+'ms'));
   });
 
-  // Corridor fill
+  // Corridor fill — upper bound starts at chart's left edge (same t as the curve)
   const cfill = el('path');
   let cf = `M${aX(-20).toFixed(1)},${aY(12).toFixed(1)}`;
   cf += `L${aX(90).toFixed(1)},${aY(12).toFixed(1)}`;
@@ -589,47 +487,39 @@ function renderAcc(container, test) {
   cf += `L${aX(10).toFixed(1)},${aY(0).toFixed(1)}`;
   cf += `L${aX(-20).toFixed(1)},${aY(0).toFixed(1)}Z`;
   cfill.setAttribute('d', cf);
-  cfill.setAttribute('fill', 'oklch(0.68 0.18 152 / .07)');
+  cfill.setAttribute('fill', 'oklch(0.52 0.13 152 / .07)');
   svg.appendChild(cfill);
 
-  // Corridor bounds — upper limit starts at the chart's left edge (same t as the curve);
-  // lower limit keeps its normative EN 1789 start at t=10ms.
   const upper = [[-20,12],[90,12],[150,0]];
   const lower = [[10,0],[20,8],[70,8],[80,0]];
   [upper, lower].forEach(pts => {
     let d = ''; pts.forEach((p,i)=>{d+=(i?'L':'M')+`${aX(p[0]).toFixed(1)},${aY(p[1]).toFixed(1)}`});
-    svg.appendChild(el('path',{d,stroke:'oklch(0.68 0.18 152 / .55)','stroke-width':'1','stroke-dasharray':'4 3',fill:'none'}));
+    svg.appendChild(el('path',{d,stroke:'oklch(0.52 0.13 152 / .65)','stroke-width':'1','stroke-dasharray':'4 3',fill:'none'}));
   });
-  svg.appendChild(tx('text',{x:aX(44),y:aY(12.7),'text-anchor':'middle','font-family':'Red Hat Mono','font-size':'7.5',fill:'oklch(0.68 0.18 152 / .55)','letter-spacing':'.06em'},'CORRIDOR EN 1789'));
+  svg.appendChild(tx('text',{x:aX(44),y:aY(12.7),'text-anchor':'middle','font-family':'IBM Plex Mono','font-size':'7.5',fill:'oklch(0.52 0.13 152 / .8)','letter-spacing':'.06em'},'CORRIDOR EN 1789'));
 
-  // Test curve — FIX: pass aX, aY directly (they take numbers)
   const d = pts2d(test.acc, aX, aY, 'g');
   const path = el('path', {d, stroke:col, 'stroke-width':'2', fill:'none', 'stroke-linecap':'round', 'stroke-linejoin':'round'});
   svg.appendChild(path);
 
-  // Peak annotation
   const pp = test.acc.reduce((a,b) => b.g > a.g ? b : a, {t:0,g:0});
   const px = aX(pp.t), py = aY(pp.g);
   svg.appendChild(el('circle', {cx:px,cy:py,r:'3.5',fill:col}));
-  svg.appendChild(el('line', {x1:px,x2:px,y1:M.t,y2:py,stroke:col,'stroke-width':'1','stroke-dasharray':'3 2',opacity:'.5'}));
-  svg.appendChild(tx('text', {x:px+6,y:py-5,'font-family':'Red Hat Mono','font-size':'9',fill:'oklch(0.93 0.005 220)','font-weight':'700'},
-    `${test.peakG} g`));
-  svg.appendChild(tx('text', {x:px+6,y:py+8,'font-family':'Red Hat Mono','font-size':'7.5',fill:'oklch(0.62 0.010 220)'},
-    'Acc_CFC60 max'));
+  svg.appendChild(el('line', {x1:px,x2:px,y1:M.t,y2:py,stroke:col,'stroke-width':'1','stroke-dasharray':'3 2',opacity:'.4'}));
+  svg.appendChild(tx('text', {x:px+6,y:py-5,'font-family':'IBM Plex Mono','font-size':'9',fill:'oklch(0.22 0.012 35)','font-weight':'700'}, `${test.peakG} g`));
+  svg.appendChild(tx('text', {x:px+6,y:py+8,'font-family':'IBM Plex Mono','font-size':'7.5',fill:'oklch(0.46 0.012 35)'}, 'Acc_CFC60 max'));
 
-  // Structural failure badge (for failed tests)
   if (!isPass) {
     const bx = aX(70), by = M.t + 4;
-    svg.appendChild(el('rect', {x:bx-4,y:by-2,width:120,height:14,rx:'3',fill:'oklch(0.15 0.06 30 / .9)',stroke:'oklch(0.68 0.18 30 / .4)','stroke-width':'1'}));
-    svg.appendChild(tx('text', {x:bx+2,y:by+8,'font-family':'Red Hat Mono','font-size':'7.5','font-weight':'700',fill:'oklch(0.68 0.18 30)','letter-spacing':'.04em'},'⚠ RUPTURE STRUCTURELLE'));
+    svg.appendChild(el('rect', {x:bx-4,y:by-2,width:120,height:14,rx:'2',fill:'oklch(0.95 0.025 26)',stroke:'oklch(0.74 0.13 26)','stroke-width':'1'}));
+    svg.appendChild(tx('text', {x:bx+2,y:by+8,'font-family':'IBM Plex Mono','font-size':'7.5','font-weight':'700',fill:'oklch(0.50 0.19 26)','letter-spacing':'.03em'},'⚠ RUPTURE STRUCTURELLE'));
   }
 
-  // Hover crosshair
-  const vh = el('line', {x1:0,x2:0,y1:M.t,y2:M.t+IH,stroke:'oklch(0.93 0.005 220 / .15)','stroke-width':'1',visibility:'hidden'});
-  const hh = el('line', {x1:M.l,x2:M.l+IW,y1:0,y2:0,stroke:'oklch(0.93 0.005 220 / .15)','stroke-width':'1',visibility:'hidden'});
+  const vh = el('line', {x1:0,x2:0,y1:M.t,y2:M.t+IH,stroke:'oklch(0.22 0.012 35 / .25)','stroke-width':'1',visibility:'hidden'});
+  const hh = el('line', {x1:M.l,x2:M.l+IW,y1:0,y2:0,stroke:'oklch(0.22 0.012 35 / .25)','stroke-width':'1',visibility:'hidden'});
   const tg = el('g', {visibility:'hidden'});
-  const tr2 = el('rect', {rx:'3',fill:'oklch(0.14 0.010 220)',stroke:'oklch(0.28 0.010 220)','stroke-width':'1'});
-  const tt = tx('text', {'font-family':'Red Hat Mono','font-size':'9','font-weight':'500',fill:'oklch(0.93 0.005 220)','dominant-baseline':'middle'},'');
+  const tr2 = el('rect', {rx:'2',fill:'oklch(0.995 0.003 50)',stroke:'oklch(0.84 0.010 40)','stroke-width':'1'});
+  const tt = tx('text', {'font-family':'IBM Plex Mono','font-size':'9','font-weight':'500',fill:'oklch(0.22 0.012 35)','dominant-baseline':'middle'},'');
   tg.appendChild(tr2); tg.appendChild(tt);
   const ov = el('rect', {x:M.l,y:M.t,width:IW,height:IH,fill:'transparent',style:'cursor:crosshair'});
   [vh,hh,tg,ov].forEach(e=>svg.appendChild(e));
@@ -651,13 +541,10 @@ function renderAcc(container, test) {
     tt.setAttribute('x',tx2); tt.setAttribute('y',ty2);
     vh.setAttribute('visibility','visible'); hh.setAttribute('visibility','visible'); tg.setAttribute('visibility','visible');
   });
-  ov.addEventListener('mouseleave', () => {
-    [vh,hh,tg].forEach(e=>e.setAttribute('visibility','hidden'));
-  });
+  ov.addEventListener('mouseleave', () => { [vh,hh,tg].forEach(e=>e.setAttribute('visibility','hidden')); });
 
-  // Axis labels
-  svg.appendChild(tx('text',{x:12,y:M.t+IH/2,'text-anchor':'middle','font-family':'Red Hat Mono','font-size':'8',fill:'oklch(0.38 0.007 220)',transform:`rotate(-90,12,${M.t+IH/2})`},'g'));
-  svg.appendChild(tx('text',{x:CW/2,y:CH-2,'text-anchor':'middle','font-family':'Red Hat Mono','font-size':'8',fill:'oklch(0.38 0.007 220)'},'Temps (ms)'));
+  svg.appendChild(tx('text',{x:12,y:M.t+IH/2,'text-anchor':'middle','font-family':'IBM Plex Mono','font-size':'8',fill:'oklch(0.64 0.010 35)',transform:`rotate(-90,12,${M.t+IH/2})`},'g'));
+  svg.appendChild(tx('text',{x:CW/2,y:CH-2,'text-anchor':'middle','font-family':'IBM Plex Mono','font-size':'8',fill:'oklch(0.64 0.010 35)'},'Temps (ms)'));
 
   container.appendChild(svg);
   animPath(path);
@@ -665,107 +552,73 @@ function renderAcc(container, test) {
 
 function renderVel(container, test) {
   const svg = el('svg', { viewBox:`0 0 ${CW} ${CH}`, class:'chart' });
-  const col = getColor(test);
-  svg.appendChild(el('rect', { width:CW, height:CH, fill:'oklch(0.08 0.007 220)' }));
+  svg.appendChild(el('rect', { width:CW, height:CH, fill:'oklch(0.995 0.003 50)' }));
 
-  // Grid H
   [0,10,20,30,40].forEach(v => {
     const y = vY(v);
     if(y < M.t || y > M.t+IH+2) return;
-    svg.appendChild(el('line', {x1:M.l,x2:M.l+IW,y1:y,y2:y,stroke:'oklch(0.20 0.006 220)','stroke-width':'1'}));
-    svg.appendChild(tx('text',{x:M.l-5,y:y+3.5,'text-anchor':'end','font-family':'Red Hat Mono','font-size':'8',fill:'oklch(0.38 0.007 220)'},v+''));
+    svg.appendChild(el('line', {x1:M.l,x2:M.l+IW,y1:y,y2:y,stroke:'oklch(0.90 0.007 40)','stroke-width':'1'}));
+    svg.appendChild(tx('text',{x:M.l-5,y:y+3.5,'text-anchor':'end','font-family':'IBM Plex Mono','font-size':'8',fill:'oklch(0.64 0.010 35)'},v+''));
   });
-  // Grid V
   [0,20,40,60,80,100,120,140].forEach(t => {
     const x = vX(t);
-    svg.appendChild(el('line', {x1:x,x2:x,y1:M.t,y2:M.t+IH,stroke:'oklch(0.20 0.006 220)','stroke-width':'1'}));
-    if(t%40===0) svg.appendChild(tx('text',{x,y:CH-M.b+12,'text-anchor':'middle','font-family':'Red Hat Mono','font-size':'8',fill:'oklch(0.38 0.007 220)'},t+'ms'));
+    svg.appendChild(el('line', {x1:x,x2:x,y1:M.t,y2:M.t+IH,stroke:'oklch(0.90 0.007 40)','stroke-width':'1'}));
+    if(t%40===0) svg.appendChild(tx('text',{x,y:CH-M.b+12,'text-anchor':'middle','font-family':'IBM Plex Mono','font-size':'8',fill:'oklch(0.64 0.010 35)'},t+'ms'));
   });
 
-  // Velocity curve — FIX: pass vX, vY directly
   const d = pts2d(test.vel, vX, vY, 'v');
-  const path = el('path', {d, stroke:'oklch(0.76 0.13 200)', 'stroke-width':'2', fill:'none', 'stroke-linecap':'round'});
+  const path = el('path', {d, stroke:'oklch(0.46 0.13 232)', 'stroke-width':'2', fill:'none', 'stroke-linecap':'round'});
   svg.appendChild(path);
 
-  // Vmax annotation
   const vy = vY(test.vmax);
-  svg.appendChild(el('line', {x1:M.l,x2:M.l+IW,y1:vy,y2:vy,stroke:'oklch(0.93 0.005 220 / .3)','stroke-width':'1','stroke-dasharray':'5 4'}));
-  svg.appendChild(el('line', {x1:vX(0),x2:vX(0),y1:M.t,y2:M.t+IH,stroke:'oklch(0.93 0.005 220 / .2)','stroke-width':'1','stroke-dasharray':'5 4'}));
-  svg.appendChild(tx('text',{x:M.l+IW-2,y:vy-5,'text-anchor':'end','font-family':'Red Hat Mono','font-size':'9','font-weight':'700',fill:'oklch(0.93 0.005 220)',opacity:'.8'},`Vmax = ${test.vmax} km/h`));
-  svg.appendChild(tx('text',{x:vX(0)+4,y:M.t+10,'font-family':'Red Hat Mono','font-size':'7.5',fill:'oklch(0.93 0.005 220 / .35)'},'t₀'));
+  svg.appendChild(el('line', {x1:M.l,x2:M.l+IW,y1:vy,y2:vy,stroke:'oklch(0.22 0.012 35 / .3)','stroke-width':'1','stroke-dasharray':'5 4'}));
+  svg.appendChild(el('line', {x1:vX(0),x2:vX(0),y1:M.t,y2:M.t+IH,stroke:'oklch(0.22 0.012 35 / .2)','stroke-width':'1','stroke-dasharray':'5 4'}));
+  svg.appendChild(tx('text',{x:M.l+IW-2,y:vy-5,'text-anchor':'end','font-family':'IBM Plex Mono','font-size':'9','font-weight':'700',fill:'oklch(0.22 0.012 35)'},`Vmax = ${test.vmax} km/h`));
+  svg.appendChild(tx('text',{x:vX(0)+4,y:M.t+10,'font-family':'IBM Plex Mono','font-size':'7.5',fill:'oklch(0.22 0.012 35 / .45)'},'t₀'));
 
-  // Axes
-  svg.appendChild(tx('text',{x:12,y:M.t+IH/2,'text-anchor':'middle','font-family':'Red Hat Mono','font-size':'8',fill:'oklch(0.38 0.007 220)',transform:`rotate(-90,12,${M.t+IH/2})`},'km/h'));
-  svg.appendChild(tx('text',{x:CW/2,y:CH-2,'text-anchor':'middle','font-family':'Red Hat Mono','font-size':'8',fill:'oklch(0.38 0.007 220)'},'Temps (ms)'));
+  svg.appendChild(tx('text',{x:12,y:M.t+IH/2,'text-anchor':'middle','font-family':'IBM Plex Mono','font-size':'8',fill:'oklch(0.64 0.010 35)',transform:`rotate(-90,12,${M.t+IH/2})`},'km/h'));
+  svg.appendChild(tx('text',{x:CW/2,y:CH-2,'text-anchor':'middle','font-family':'IBM Plex Mono','font-size':'8',fill:'oklch(0.64 0.010 35)'},'Temps (ms)'));
 
   container.appendChild(svg);
   animPath(path);
 }
 
 // ─────────────────────────────────────────────────────────────
-// SYSTEM DIAGRAM (no side-stripe borders)
+// SYSTEM STACK — plain line-art list (no card chrome, no SVG boxes)
 // ─────────────────────────────────────────────────────────────
-function renderSystem() {
-  const svg = document.getElementById('sys');
+function buildSystem() {
   const comps = [
-    { label:'MASSE ÉPISHUTTLE', sub:'Simulacre EpiShuttle + patient', mass:'140 kg', c:'oklch(0.60 0.12 220)', n:'01' },
-    { label:'INTERFACE AMOVIBLE', sub:'Couche + fixation 4 axes', mass:'7,3 kg', c:'oklch(0.65 0.14 285)', n:'02' },
-    { label:'CABBRI V2', sub:'Brancard motorisé RTS Chapuis', mass:'57 kg', c:'oklch(0.68 0.18 30)', n:'03' },
-    { label:'ANCRAGE S310 / AXIONIS', sub:'Variante motorisée — 3 points', mass:'28,3 kg', c:'oklch(0.74 0.15 72)', n:'04' },
+    { name:'Masse ÉpiShuttle', sub:'Simulacre EpiShuttle + patient', mass:'140 kg' },
+    { name:'Interface amovible', sub:'Couche + fixation 4 axes', mass:'7,3 kg' },
+    { name:'Cabbri V2', sub:'Brancard motorisé RTS Chapuis', mass:'57 kg' },
+    { name:'Ancrage S310 / Axionis', sub:'Variante motorisée — 3 points', mass:'28,3 kg' },
   ];
-  const H = 70, gap = 14, startY = 8;
-  const alpha = (c, a) => c.slice(0, -1) + ` / ${a})`; // oklch(L C H) -> oklch(L C H / a)
-  comps.forEach((c, i) => {
-    const y = startY + i * (H + gap);
-    const g = document.createElementNS(NS, 'g');
-    // Full border box (no side stripe)
-    g.appendChild(el('rect', {x:2,y,width:248,height:H,rx:'6',fill:alpha(c.c,'.08'),stroke:alpha(c.c,'.30'),'stroke-width':'1.2'}));
-
-    // Number badge (top-left, no side-stripe)
-    g.appendChild(el('rect',{x:10,y:y+10,width:22,height:16,rx:'3',fill:alpha(c.c,'.18')}));
-    g.appendChild(tx('text',{x:21,y:y+22,'text-anchor':'middle','font-family':'Red Hat Mono','font-size':'8','font-weight':'700',fill:c.c},c.n));
-
-    g.appendChild(tx('text',{x:40,y:y+22,'font-family':'Syne','font-size':'11','font-weight':'700',fill:'oklch(0.93 0.005 220)','letter-spacing':'.03em'},c.label));
-    g.appendChild(tx('text',{x:40,y:y+37,'font-family':'Red Hat Mono','font-size':'8',fill:'oklch(0.50 0.008 220)'},c.sub));
-
-    // Mass badge
-    g.appendChild(el('rect',{x:190,y:y+44,width:54,height:18,rx:'3',fill:alpha(c.c,'.15')}));
-    g.appendChild(tx('text',{x:217,y:y+57,'text-anchor':'middle','font-family':'Red Hat Mono','font-size':'10','font-weight':'700',fill:c.c},c.mass));
-
-    if (i < comps.length - 1) {
-      const lineY = y + H;
-      g.appendChild(el('line',{x1:125,x2:125,y1:lineY,y2:lineY+gap,stroke:'oklch(0.27 0.010 220)','stroke-width':'1.5','stroke-dasharray':'3 3'}));
-      g.appendChild(el('polygon',{points:`120,${lineY+gap-2} 130,${lineY+gap-2} 125,${lineY+gap+3}`,fill:'oklch(0.27 0.010 220)'}));
-    }
-    svg.appendChild(g);
-  });
-
-  // Total mass row
-  const ty = startY + comps.length * (H + gap);
-  svg.appendChild(el('rect',{x:2,y:ty,width:248,height:30,rx:'6',fill:'oklch(0.18 0.007 220)',stroke:'oklch(0.27 0.010 220)','stroke-width':'1'}));
-  svg.appendChild(tx('text',{x:12,y:ty+19,'font-family':'Red Hat Mono','font-size':'8.5',fill:'oklch(0.40 0.008 220)','letter-spacing':'.04em'},'MASSE TOTALE SYSTÈME'));
-  svg.appendChild(tx('text',{x:242,y:ty+20,'text-anchor':'end','font-family':'Syne','font-size':'13','font-weight':'700',fill:'oklch(0.93 0.005 220)'},'232,6 kg'));
+  document.getElementById('system').innerHTML = comps.map(c=>`
+    <div class="stack-item">
+      <div class="stack-row"><span class="stack-name">${c.name}</span><span class="stack-mass">${c.mass}</span></div>
+      <div class="stack-sub">${c.sub}</div>
+    </div>`).join('') + `
+    <div class="stack-total"><span class="k">Masse totale système</span><span class="v">232,6 kg</span></div>`;
 }
 
 // ─────────────────────────────────────────────────────────────
-// TIMELINE
+// TIMELINE — flat ledger rows, no dot/line decoration
 // ─────────────────────────────────────────────────────────────
 function renderTimeline() {
   const events = [
-    {s:'S1',date:'10 sep. 2025',dot:'oklch(0.68 0.18 30)',desc:'1 tir · X+ ÉCHEC',note:'Embases Delrin lâchées',ids:['CINV_2453']},
-    {s:'S2',date:'19–20 fév. 2026',dot:'oklch(0.74 0.15 72)',desc:'4 tirs · 3 validés / 1 échec',note:'Y ÉCHEC — colle SikaFast 555',ids:['CINV_2748','CINV_2749','CINV_2750','CINV_2751']},
-    {s:'S3',date:'25 mars 2026',dot:'oklch(0.68 0.18 30)',desc:'1 tir · Y ÉCHEC',note:'Ancrage S310/Axionis',ids:['CINV_2773']},
-    {s:'S4',date:'28 mai 2026',dot:'oklch(0.68 0.18 30)',desc:'1 tir · Y ÉCHEC',note:'Bride n°1 → longeron',ids:['CINV_2875']},
-    {s:'S5',date:'PENDING',dot:'oklch(0.40 0.008 220)',desc:'Prochain tir Y',note:'Platines taraudées + sangles 10g',ids:[]},
+    {s:'S1',date:'10 sep. 2025',result:'X+ ÉCHEC',cls:'fail',note:'Embases Delrin lâchées',ids:['CINV_2453']},
+    {s:'S2',date:'19–20 fév. 2026',result:'3 VALIDÉS / 1 ÉCHEC',cls:'ok',note:'Y échoue — colle SikaFast 555',ids:['CINV_2748','CINV_2749','CINV_2750','CINV_2751']},
+    {s:'S3',date:'25 mars 2026',result:'Y ÉCHEC',cls:'fail',note:'Ancrage S310/Axionis cède',ids:['CINV_2773']},
+    {s:'S4',date:'28 mai 2026',result:'Y ÉCHEC',cls:'fail',note:'Bride n°1 → longeron déchiré',ids:['CINV_2875']},
+    {s:'S5',date:'Pending',result:'PROCHAIN TIR Y',cls:'pending',note:'Platines taraudées + sangles 10g',ids:[]},
   ];
   document.getElementById('vtl').innerHTML = events.map(e=>`
-    <div class="vi">
-      <div class="vdot" style="background:${e.dot}"></div>
-      <div class="vcard">
-        <div class="vtop"><span class="vs">${e.s}</span><span class="vd">${e.date}</span></div>
-        <div class="vdesc">${e.desc}</div>
-        <div class="vnote">${e.note}</div>
-        ${e.ids.length?`<div class="vids">${e.ids.map(id=>`<span class="ctag">${id}</span>`).join('')}</div>`:''}
+    <div class="tl-row">
+      <div class="tl-date">${e.date}</div>
+      <div class="tl-body">
+        <div class="tl-head"><span class="tl-sess">${e.s}</span><span class="tl-result ${e.cls}">${e.result}</span></div>
+        <div class="tl-note">${e.note}</div>
+        ${e.ids.length?`<div class="tl-ids">${e.ids.join(' · ')}</div>`:''}
       </div>
     </div>`).join('');
 }
@@ -785,8 +638,8 @@ function buildSessions() {
         <div class="sn">${s.num}</div>
         <div><div class="stit">Session ${s.num}</div><div class="sdate">${s.date} · ${s.ref}</div></div>
         <div class="ssum">
-          ${ok?`<div class="mb ok">${ok} VALIDÉ${ok>1?'S':''}</div>`:''}
-          ${ko?`<div class="mb ko">${ko} ÉCHEC${ko>1?'S':''}</div>`:''}
+          ${ok?`<span class="ok">${ok} VALIDÉ${ok>1?'S':''}</span>`:''}
+          ${ko?`<span class="ko">${ko} ÉCHEC${ko>1?'S':''}</span>`:''}
         </div>
       </div>
       <div class="trows">${sts.map(buildRow).join('')}</div>
@@ -810,17 +663,18 @@ function buildSessions() {
 
 function buildRow(test) {
   const ok = test.status === 'VALIDE';
-  const pc = ok ? 'tpill-ok' : 'tpill-ko';
-  const pl = ok ? 'VALIDÉ' : 'ÉCHEC';
-  const dirColors = {'X+':'var(--cx)','X−':'var(--cx)','Y':'var(--cy)','Z':'var(--cz)'};
-  const dc = dirColors[test.dir] || 'var(--t1)';
+  const sc = ok ? 'ok' : 'ko';
+  const sl = ok ? 'VALIDÉ' : 'ÉCHEC';
+  const dirColors = {'X+':'oklch(0.46 0.13 232)','X−':'oklch(0.46 0.13 232)','Y':'oklch(0.58 0.135 68)','Z':'oklch(0.47 0.14 296)'};
+  const dc = dirColors[test.dir] || 'var(--ink-1)';
+  const dirLabel = {X:'Frontal',Y:'Latéral',Z:'Vertical'}[test.dir[0]];
   const fp = test.fp ? `<div class="ii" style="grid-column:span 2"><div class="ilbl">Point de rupture</div><div class="ival fp">${test.fp}</div></div>` : '';
   return `<div class="tr" data-id="${test.id}">
     <div class="trhdr">
       <div class="tid">${test.id}</div>
       <div class="tdir" style="color:${dc}">${test.dir}</div>
-      <span class="pill ${pc} tpill"><span class="dot"></span>${pl}</span>
-      <div class="tname">${test.dir === 'Y' && test.status==='ECHEC' ? `Side Impact Y` : test.dir.replace('+','<sup>+</sup>').replace('−','<sup>−</sup>')+' '+{X:'Frontal',Y:'Latéral',Z:'Vertical'}[test.dir[0]]}</div>
+      <div class="tstat ${sc}">${sl}</div>
+      <div class="tname">${test.dir.replace('+','⁺').replace('−','⁻')} ${dirLabel}</div>
       <div class="tdate">${test.date}</div>
       <div class="tpeak">${test.peakG} g</div>
       <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
@@ -854,27 +708,27 @@ function buildRow(test) {
 function buildMods() {
   document.getElementById('mods').innerHTML = MODS.map(m=>`
     <div class="mentry">
-      <div class="mc">
-        <div class="mchdr">
+      <div class="mchdr">
+        <div>
           <div class="mcn">MODIFICATION N°${m.num} — Suite à ${m.after}</div>
-          <div class="mctrow">
-            <div class="mct">${m.title}</div>
-            <div class="mcd">${m.date}</div>
-          </div>
+          <div class="mct">${m.title}</div>
         </div>
-        <div class="mcb">
+        <div class="mcd">${m.date}</div>
+      </div>
+      <div class="mcb">
+        <div>
           <div class="msp">Problème identifié</div>
           <div class="mpb">${m.prob}</div>
+        </div>
+        <div>
           <div class="msp">Solutions apportées</div>
           <ol class="msl">${m.sols.map(s=>`<li>${s}</li>`).join('')}</ol>
         </div>
-        <div class="mcf">
-          <span>▸ Test suivant :</span>
-          ${m.next!=='PENDING'
-            ? `<span class="mcf-next">${m.next}</span>`
-            : `<span class="mcf-pend">Date UTAC pending — greenlight en attente</span>`}
-          <span style="margin-left:auto">${m.valid}</span>
-        </div>
+      </div>
+      <div class="mcf">
+        <span>▸ Test suivant :</span>
+        ${m.next!=='PENDING' ? `<span class="mcf-next">${m.next}</span>` : `<span class="mcf-pend">Date UTAC pending — greenlight en attente</span>`}
+        <span style="margin-left:auto">${m.valid}</span>
       </div>
     </div>`).join('');
 }
@@ -896,7 +750,7 @@ function tab(id, btn) {
 // INIT
 // ─────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  renderSystem();
+  buildSystem();
   renderTimeline();
 });
 </script>
