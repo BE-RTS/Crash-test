@@ -9,219 +9,153 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* Paper-tinted neutrals — never pure white/black, warm hue toward the brand */
-  --bg: oklch(0.97 0.006 50);
-  --surface: oklch(0.995 0.003 50);
-  --surface-2: oklch(0.955 0.006 50);
-  --ink-1: oklch(0.22 0.012 35);
-  --ink-2: oklch(0.46 0.012 35);
-  --ink-3: oklch(0.64 0.010 35);
-  --line: oklch(0.84 0.010 40);
-  --line-soft: oklch(0.90 0.007 40);
-
-  /* Full-palette strategy: deliberate semantic roles for status data-viz */
-  --brand: oklch(0.50 0.19 26);
-  --ok: oklch(0.52 0.13 152);
-  --ok-bg: oklch(0.94 0.035 152);
-  --ok-line: oklch(0.74 0.10 152);
-  --warn: oklch(0.58 0.135 68);
-  --warn-bg: oklch(0.94 0.045 68);
-  --warn-line: oklch(0.78 0.11 68);
-  --fail: oklch(0.50 0.19 26);
-  --fail-bg: oklch(0.95 0.025 26);
-  --fail-line: oklch(0.74 0.13 26);
-
-  /* Direction identity colors for chart curves (distinct from status colors) */
-  --cx: oklch(0.46 0.13 232);
-  --cy: oklch(0.58 0.135 68);
-  --cz: oklch(0.47 0.14 296);
-
-  --fd:'Archivo',sans-serif;
-  --fm:'IBM Plex Mono',monospace;
+  --bg:oklch(0.97 0.006 50);--surface:oklch(0.995 0.003 50);--surface-2:oklch(0.955 0.006 50);
+  --ink-1:oklch(0.22 0.012 35);--ink-2:oklch(0.46 0.012 35);--ink-3:oklch(0.64 0.010 35);
+  --line:oklch(0.84 0.010 40);--line-soft:oklch(0.90 0.007 40);
+  --brand:oklch(0.50 0.19 26);
+  --ok:oklch(0.52 0.13 152);--warn:oklch(0.58 0.135 68);--warn-bg:oklch(0.94 0.045 68);--warn-line:oklch(0.78 0.11 68);
+  --fail:oklch(0.50 0.19 26);
+  --fd:'Archivo',sans-serif;--fm:'IBM Plex Mono',monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  background:var(--bg);color:var(--ink-1);
-  font-family:var(--fd);font-size:14px;line-height:1.6;min-height:100vh;
-}
+body{background:var(--bg);color:var(--ink-1);font-family:var(--fd);font-size:14px;line-height:1.6}
 
-/* ── MASTHEAD ── */
-.hdr{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 36px;height:64px;border-bottom:2px solid var(--ink-1);
-  background:var(--bg);position:sticky;top:0;z-index:100;
-}
+/* CSS-only tabs — radios must be direct siblings of nav/main, see body order */
+.tabin{display:none}
+.tp{display:none}
+#r-g:checked ~ main #panel-g,
+#r-t:checked ~ main #panel-t,
+#r-j:checked ~ main #panel-j{display:block}
+#r-g:checked ~ nav label[for=r-g],
+#r-t:checked ~ nav label[for=r-t],
+#r-j:checked ~ nav label[for=r-j]{color:var(--ink-1);border-bottom-color:var(--brand)}
+
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:0 36px;height:64px;border-bottom:2px solid var(--ink-1);position:sticky;top:0;background:var(--bg);z-index:10}
 .hdr-left{display:flex;align-items:center;gap:18px}
-.logo{font-family:var(--fd);font-size:21px;font-weight:800;letter-spacing:-.01em;color:var(--ink-1)}
+.logo{font-size:21px;font-weight:800;letter-spacing:-.01em}
 .logo em{font-style:normal;color:var(--brand)}
 .hdr-sep{width:1px;height:22px;background:var(--line)}
-.proj{font-family:var(--fd);font-size:13px;font-weight:600;color:var(--ink-2)}
+.proj{font-size:13px;font-weight:600;color:var(--ink-2)}
 .hdr-right{text-align:right}
-.hdr-ref{font-family:var(--fm);font-size:9.5px;color:var(--ink-3);letter-spacing:.02em}
-.pill-status{
-  display:inline-flex;align-items:center;gap:6px;
-  font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.10em;
-  color:var(--warn);margin-top:5px;padding:3px 10px;border:1px solid var(--warn-line);
-  border-radius:2px;
-}
-.pill-status .dot{width:5px;height:5px;border-radius:50%;background:currentColor}
-.dot.pulse{animation:bk 1.6s ease-in-out infinite}
-@keyframes bk{0%,100%{opacity:1}50%{opacity:.3}}
+.hdr-ref{font-family:var(--fm);font-size:9.5px;color:var(--ink-3)}
+.pill-status{display:inline-flex;align-items:center;gap:6px;font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--warn);margin-top:5px;padding:3px 10px;border:1px solid var(--warn-line);border-radius:2px}
+.pill-status::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;animation:bk 1.6s ease-in-out infinite}
+@keyframes bk{50%{opacity:.3}}
 
-/* ── TAB STRIP ── */
-.tabs{display:flex;gap:30px;padding:0 36px;border-bottom:1px solid var(--line);background:var(--bg);position:sticky;top:64px;z-index:90}
-.tb{
-  padding:14px 0;font-family:var(--fd);font-size:13px;font-weight:600;color:var(--ink-3);
-  background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;
-  letter-spacing:.01em;transition:color .15s,border-color .15s;margin-bottom:-1px;
-}
-.tb:hover{color:var(--ink-2)}
-.tb.on{color:var(--ink-1);border-bottom-color:var(--brand)}
+nav.tabs{display:flex;gap:30px;padding:0 36px;border-bottom:1px solid var(--line);position:sticky;top:64px;background:var(--bg);z-index:9}
+nav.tabs label{padding:14px 0;font-size:13px;font-weight:600;color:var(--ink-3);border-bottom:2px solid transparent;cursor:pointer}
 
-/* ── MAIN ── */
-.main{max-width:1180px;margin:0 auto;padding:0 0 60px}
-.tp{display:none}.tp.on{display:block}
+main{max-width:1180px;margin:0 auto;padding:0 0 60px;display:block}
 
-/* ── AXIS LEDGER (replaces 4-identical-card pattern) ── */
 .ledger-wrap{padding:30px 36px 0}
-.ledger-label{
-  font-family:var(--fm);font-size:10px;font-weight:600;letter-spacing:.10em;
-  text-transform:uppercase;color:var(--ink-3);margin-bottom:16px;
-}
+.ledger-label{font-family:var(--fm);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:16px}
 .ledger{display:grid;grid-template-columns:1fr 1fr 1.3fr 1fr;border-top:1px solid var(--ink-1);border-bottom:1px solid var(--line)}
 .lcell{padding:18px 22px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:7px}
 .lcell:last-child{border-right:none}
 .lcell.pending{background:var(--warn-bg)}
-.l-ax-num{font-family:var(--fd);font-size:30px;font-weight:800;letter-spacing:-.02em;color:var(--ink-1)}
+.l-ax-num{font-size:30px;font-weight:800;letter-spacing:-.02em}
 .lcell.pending .l-ax-num{color:var(--warn)}
 .l-ax-name{font-size:11px;color:var(--ink-3)}
-.l-stat{font-family:var(--fm);font-size:10.5px;font-weight:600;letter-spacing:.06em;display:flex;align-items:center;gap:5px}
-.l-stat.ok{color:var(--ok)}
-.l-stat.warn{color:var(--warn)}
-.l-stat::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
+.l-stat{font-family:var(--fm);font-size:10.5px;font-weight:600}
+.l-stat.ok{color:var(--ok)}.l-stat.warn{color:var(--warn)}
+.l-stat::before{content:'● '}
 .l-detail{font-family:var(--fm);font-size:10.5px;color:var(--ink-2)}
 .l-meta{font-family:var(--fm);font-size:9.5px;color:var(--ink-3)}
 
-/* ── PROGRESS SENTENCE (replaces hero-metric template) ── */
 .progress-line{display:flex;align-items:center;gap:14px;padding:16px 36px;border-bottom:1px solid var(--line)}
 .progress-track{flex:1;height:1px;background:var(--line-soft);position:relative}
 .progress-fill{position:absolute;left:0;top:0;height:1px;background:var(--ink-1);width:75%}
 .progress-fill::after{content:'';position:absolute;right:-3px;top:-3px;width:7px;height:7px;border-radius:50%;background:var(--ink-1)}
 .progress-text{font-size:12.5px;color:var(--ink-2);white-space:nowrap}
-.progress-text strong{color:var(--ink-1);font-weight:700}
+.progress-text strong{color:var(--ink-1)}
 
-/* ── TWO COLUMN: SYSTEM + TIMELINE ── */
 .cols{display:grid;grid-template-columns:280px 1fr;gap:48px;padding:32px 36px 36px}
-.col-label{
-  font-family:var(--fm);font-size:10px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;
-  color:var(--ink-3);margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--ink-1);
-}
+.col-label{font-family:var(--fm);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--ink-1)}
 .stack-item{padding:13px 0;border-bottom:1px solid var(--line-soft)}
 .stack-item:first-child{padding-top:0}
-.stack-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-.stack-name{font-size:12.5px;font-weight:700;color:var(--ink-1)}
+.stack-row{display:flex;justify-content:space-between;gap:10px}
+.stack-name{font-size:12.5px;font-weight:700}
 .stack-mass{font-family:var(--fm);font-size:11.5px;color:var(--ink-2)}
 .stack-sub{font-family:var(--fm);font-size:10px;color:var(--ink-3);margin-top:3px}
 .stack-total{display:flex;justify-content:space-between;padding-top:14px;margin-top:4px;font-family:var(--fm);font-size:11px}
-.stack-total .v{font-weight:700;color:var(--ink-1)}
+.stack-total .v{font-weight:700}
 .stack-total .k{color:var(--ink-3)}
-
 .tl-row{display:grid;grid-template-columns:96px 1fr;gap:18px;padding:12px 0;border-bottom:1px solid var(--line-soft)}
 .tl-row:first-child{padding-top:0}
-.tl-date{font-family:var(--fm);font-size:10.5px;color:var(--ink-3);padding-top:2px}
-.tl-body{display:flex;flex-direction:column;gap:3px}
-.tl-head{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
-.tl-sess{font-family:var(--fd);font-weight:700;font-size:13px}
+.tl-date{font-family:var(--fm);font-size:10.5px;color:var(--ink-3)}
+.tl-head{display:flex;gap:9px;flex-wrap:wrap;align-items:baseline}
+.tl-sess{font-weight:700;font-size:13px}
 .tl-result{font-family:var(--fm);font-size:10.5px;font-weight:600}
-.tl-result.ok{color:var(--ok)}
-.tl-result.fail{color:var(--fail)}
-.tl-result.pending{color:var(--warn)}
+.tl-result.ok{color:var(--ok)}.tl-result.fail{color:var(--fail)}.tl-result.pending{color:var(--warn)}
 .tl-note{font-size:12px;color:var(--ink-2)}
 .tl-ids{font-family:var(--fm);font-size:9.5px;color:var(--ink-3)}
 
-/* ── SESSION BLOCKS (Rapports de test tab) ── */
 .sblock{padding:0 36px;margin-bottom:8px}
 .sblock:first-child{padding-top:28px}
 .shdr{display:flex;align-items:center;gap:10px;padding:14px 0 10px;border-bottom:1px solid var(--ink-1)}
-.sn{
-  width:24px;height:24px;flex-shrink:0;border:1px solid var(--ink-1);
-  display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:11px;font-weight:700;
-}
-.stit{font-family:var(--fd);font-size:15px;font-weight:700}
-.sdate{font-family:var(--fm);font-size:9.5px;color:var(--ink-3);margin-top:1px}
-.ssum{margin-left:auto;display:flex;gap:14px;font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.04em}
-.ssum .ok{color:var(--ok)}
-.ssum .ko{color:var(--fail)}
+.sn{width:24px;height:24px;border:1px solid var(--ink-1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.stit{font-size:15px;font-weight:700}
+.sdate{font-family:var(--fm);font-size:9.5px;color:var(--ink-3)}
+.ssum{margin-left:auto;display:flex;gap:14px;font-family:var(--fm);font-size:10px;font-weight:700}
+.ssum .ok{color:var(--ok)}.ssum .ko{color:var(--fail)}
 
-.trows{display:flex;flex-direction:column}
-.tr{border-bottom:1px solid var(--line-soft)}
-.trhdr{display:flex;align-items:center;padding:13px 0;cursor:pointer;gap:14px;transition:background .12s}
-.trhdr:hover{background:var(--surface-2)}
-.tid{font-family:var(--fm);font-size:10.5px;font-weight:700;color:var(--ink-3);width:84px;flex-shrink:0}
-.tdir{font-family:var(--fd);font-size:19px;font-weight:800;width:38px;flex-shrink:0}
-.tstat{font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.06em;width:66px;flex-shrink:0;display:flex;align-items:center;gap:5px}
-.tstat::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
-.tstat.ok{color:var(--ok)}
-.tstat.ko{color:var(--fail)}
+/* native <details> replaces all open/close JS */
+details.tr{border-bottom:1px solid var(--line-soft)}
+summary.trhdr{display:flex;align-items:center;padding:13px 0;cursor:pointer;gap:14px;list-style:none}
+summary.trhdr::-webkit-details-marker{display:none}
+summary.trhdr:hover{background:var(--surface-2)}
+.tid{font-family:var(--fm);font-size:10.5px;font-weight:700;color:var(--ink-3);width:84px}
+.tdir{font-size:19px;font-weight:800;width:38px}
+.tstat{font-family:var(--fm);font-size:10px;font-weight:700;width:66px}
+.tstat::before{content:'● '}
+.tstat.ok{color:var(--ok)}.tstat.ko{color:var(--fail)}
 .tname{font-size:12px;color:var(--ink-2);flex:1;min-width:0}
 .tdate{font-family:var(--fm);font-size:10px;color:var(--ink-3);white-space:nowrap}
-.tpeak{font-family:var(--fm);font-size:12px;font-weight:700;color:var(--ink-1);min-width:58px;text-align:right;flex-shrink:0}
-.chevron{width:14px;height:14px;color:var(--ink-3);transition:transform .18s;flex-shrink:0}
-.tr.open .chevron{transform:rotate(180deg)}
-.tbody{display:none;padding:0 0 22px}
-.tr.open .tbody{display:block}
+.tpeak{font-family:var(--fm);font-size:12px;font-weight:700;min-width:58px;text-align:right}
+.chev{margin-left:auto;width:14px;height:14px;color:var(--ink-3);transition:transform .15s}
+details.tr[open] .chev{transform:rotate(180deg)}
+.tbody{padding:0 0 22px}
 .infog{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 12px}
 .ii{display:flex;flex-direction:column;gap:2px}
 .ilbl{font-family:var(--fm);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
-.ival{font-family:var(--fm);font-size:12px;font-weight:500;color:var(--ink-1)}
+.ival{font-family:var(--fm);font-size:12px;color:var(--ink-1)}
 .ival.fp{color:var(--fail)}
 .obs{background:var(--surface-2);border-left:2px solid var(--ink-1);padding:9px 14px;margin-bottom:14px}
 .obsl{font-family:var(--fm);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:3px}
-.obst{font-size:12px;color:var(--ink-2);line-height:1.55}
+.obst{font-size:12px;color:var(--ink-2)}
 .chartg{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .cbox{background:var(--surface);border:1px solid var(--line);padding:12px}
-.cbox.fail-box{border-color:var(--fail-line)}
-.clbl{font-family:var(--fm);font-size:8.5px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
-svg.chart{width:100%;height:auto;display:block}
+.cbox.fail-box{border-color:oklch(0.74 0.13 26)}
+.clbl{font-family:var(--fm);font-size:8.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.chart{width:100%;display:block}
 
-/* ── JOURNAL TECHNIQUE (mods) ── */
 .jwrap{padding:28px 36px 0}
-.jintro{
-  font-family:var(--fm);font-size:10px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;
-  color:var(--ink-3);margin-bottom:20px;
-}
+.jintro{font-family:var(--fm);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:20px}
 .mentry{border-top:1px solid var(--ink-1);padding:18px 0 26px}
-.mchdr{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin-bottom:14px}
-.mcn{font-family:var(--fm);font-size:9.5px;font-weight:700;letter-spacing:.08em;color:var(--brand);margin-bottom:3px}
-.mct{font-family:var(--fd);font-size:17px;font-weight:700}
+.mchdr{display:flex;justify-content:space-between;gap:14px;margin-bottom:14px}
+.mcn{font-family:var(--fm);font-size:9.5px;font-weight:700;color:var(--brand);margin-bottom:3px}
+.mct{font-size:17px;font-weight:700}
 .mcd{font-family:var(--fm);font-size:10px;color:var(--ink-3);white-space:nowrap}
 .mcb{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.msp{font-family:var(--fm);font-size:9.5px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--ink-3);margin-bottom:9px}
-.mpb{background:var(--fail-bg);border-left:2px solid var(--fail);padding:10px 14px;font-size:12.5px;color:var(--ink-2);line-height:1.6}
+.msp{font-family:var(--fm);font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:9px}
+.mpb{background:oklch(0.95 0.025 26);border-left:2px solid var(--fail);padding:10px 14px;font-size:12.5px;color:var(--ink-2)}
 .msl{list-style:none;display:flex;flex-direction:column;gap:8px;counter-reset:li}
-.msl li{display:flex;gap:11px;font-size:12.5px;color:var(--ink-2);line-height:1.55}
-.msl li::before{
-  content:counter(li,decimal-leading-zero);counter-increment:li;
-  font-family:var(--fm);font-size:9.5px;font-weight:700;color:var(--brand);flex-shrink:0;padding-top:2px;min-width:20px;
-}
-.mcf{
-  margin-top:16px;padding-top:12px;border-top:1px solid var(--line-soft);
-  font-family:var(--fm);font-size:10px;color:var(--ink-3);display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-}
+.msl li{display:flex;gap:11px;font-size:12.5px;color:var(--ink-2)}
+.msl li::before{content:counter(li,decimal-leading-zero);counter-increment:li;font-family:var(--fm);font-size:9.5px;font-weight:700;color:var(--brand);min-width:20px}
+.mcf{margin-top:16px;padding-top:12px;border-top:1px solid var(--line-soft);font-family:var(--fm);font-size:10px;color:var(--ink-3);display:flex;gap:10px;flex-wrap:wrap}
 .mcf-next{color:var(--ink-2);font-weight:600}
 .mcf-pend{color:var(--warn);font-weight:600}
 
-/* ── ANIMATIONS ── */
-@keyframes fup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.ani{animation:fup .3s ease-out forwards;opacity:0}
-
 @media(max-width:1000px){.cols{grid-template-columns:1fr}}
-@media(max-width:880px){.ledger{grid-template-columns:1fr 1fr}.lcell:nth-child(2){border-right:none}.chartg{grid-template-columns:1fr}.mcb{grid-template-columns:1fr}}
-@media(max-width:640px){.hdr{padding:0 18px}.tabs{padding:0 18px}.ledger-wrap{padding:24px 18px 0}.cols{padding:28px 18px}.sblock,.jwrap{padding:0 18px}.infog{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:880px){.ledger{grid-template-columns:1fr 1fr}.chartg{grid-template-columns:1fr}.mcb{grid-template-columns:1fr}}
+@media(max-width:640px){.hdr,nav.tabs,.ledger-wrap,.sblock,.jwrap{padding-left:18px;padding-right:18px}.cols{padding:28px 18px}.infog{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
+
+<input type="radio" name="tab" id="r-g" class="tabin" checked>
+<input type="radio" name="tab" id="r-t" class="tabin">
+<input type="radio" name="tab" id="r-j" class="tabin">
 
 <header class="hdr">
   <div class="hdr-left">
@@ -231,102 +165,65 @@ svg.chart{width:100%;height:auto;display:block}
   </div>
   <div class="hdr-right">
     <div class="hdr-ref">ARCSAS2503933 / ARCSAS2601836 · UTAC V. NORTURE</div>
-    <div class="pill-status"><span class="dot pulse"></span>CAMPAGNE EN COURS</div>
+    <div class="pill-status">CAMPAGNE EN COURS</div>
   </div>
 </header>
 
 <nav class="tabs">
-  <button class="tb on" onclick="tab('g',this)">Vue d'ensemble</button>
-  <button class="tb" onclick="tab('t',this)">Rapports de test</button>
-  <button class="tb" onclick="tab('j',this)">Journal technique</button>
+  <label for="r-g">Vue d'ensemble</label>
+  <label for="r-t">Rapports de test</label>
+  <label for="r-j">Journal technique</label>
 </nav>
 
-<main class="main">
-
-  <!-- VUE D'ENSEMBLE -->
-  <div class="tp on" id="tab-g">
+<main>
+  <div class="tp" id="panel-g">
     <div class="ledger-wrap">
       <div class="ledger-label">Séquence des 4 tirs requis — Norme EN 1789+A2, 10g</div>
       <div class="ledger">
-        <div class="lcell">
-          <div class="l-ax-num">X+</div>
-          <div class="l-ax-name">Frontal · Impact avant</div>
-          <div class="l-stat ok">VALIDÉ</div>
-          <div class="l-detail">10,52 g</div>
-          <div class="l-meta">CINV_2749 · 19.02.2026</div>
-        </div>
-        <div class="lcell">
-          <div class="l-ax-num">X−</div>
-          <div class="l-ax-name">Arrière · Impact arrière</div>
-          <div class="l-stat ok">VALIDÉ</div>
-          <div class="l-detail">10,31 g</div>
-          <div class="l-meta">CINV_2748 · 19.02.2026</div>
-        </div>
-        <div class="lcell pending">
-          <div class="l-ax-num">Y</div>
-          <div class="l-ax-name">Latéral · Impact de côté</div>
-          <div class="l-stat warn">EN COURS — 3 TENTATIVES</div>
-          <div class="l-detail">Prochain tir pending</div>
-          <div class="l-meta">Greenlight UTAC en attente</div>
-        </div>
-        <div class="lcell">
-          <div class="l-ax-num">Z</div>
-          <div class="l-ax-name">Vertical · Arrachement</div>
-          <div class="l-stat ok">VALIDÉ</div>
-          <div class="l-detail">10,49 g</div>
-          <div class="l-meta">CINV_2751 · 20.02.2026</div>
-        </div>
+        <div class="lcell"><div class="l-ax-num">X+</div><div class="l-ax-name">Frontal · Impact avant</div><div class="l-stat ok">VALIDÉ</div><div class="l-detail">10,52 g</div><div class="l-meta">CINV_2749 · 19.02.2026</div></div>
+        <div class="lcell"><div class="l-ax-num">X−</div><div class="l-ax-name">Arrière · Impact arrière</div><div class="l-stat ok">VALIDÉ</div><div class="l-detail">10,31 g</div><div class="l-meta">CINV_2748 · 19.02.2026</div></div>
+        <div class="lcell pending"><div class="l-ax-num">Y</div><div class="l-ax-name">Latéral · Impact de côté</div><div class="l-stat warn">EN COURS — 3 TENTATIVES</div><div class="l-detail">Prochain tir pending</div><div class="l-meta">Greenlight UTAC en attente</div></div>
+        <div class="lcell"><div class="l-ax-num">Z</div><div class="l-ax-name">Vertical · Arrachement</div><div class="l-stat ok">VALIDÉ</div><div class="l-detail">10,49 g</div><div class="l-meta">CINV_2751 · 20.02.2026</div></div>
       </div>
     </div>
-
     <div class="progress-line">
       <div class="progress-text"><strong>3 / 4</strong> axes validés</div>
       <div class="progress-track"><div class="progress-fill"></div></div>
       <div class="progress-text">25% restant — axe Y</div>
     </div>
-
     <div class="cols">
       <div>
         <div class="col-label">Architecture du système testé</div>
-        <div id="system"></div>
+        <div class="stack-item"><div class="stack-row"><span class="stack-name">Masse ÉpiShuttle</span><span class="stack-mass">140 kg</span></div><div class="stack-sub">Simulacre EpiShuttle + patient</div></div>
+        <div class="stack-item"><div class="stack-row"><span class="stack-name">Interface amovible</span><span class="stack-mass">7,3 kg</span></div><div class="stack-sub">Couche + fixation 4 axes</div></div>
+        <div class="stack-item"><div class="stack-row"><span class="stack-name">Cabbri V2</span><span class="stack-mass">57 kg</span></div><div class="stack-sub">Brancard motorisé RTS Chapuis</div></div>
+        <div class="stack-item"><div class="stack-row"><span class="stack-name">Ancrage S310 / Axionis</span><span class="stack-mass">28,3 kg</span></div><div class="stack-sub">Variante motorisée — 3 points</div></div>
+        <div class="stack-total"><span class="k">Masse totale système</span><span class="v">232,6 kg</span></div>
       </div>
       <div>
         <div class="col-label">Chronologie de la campagne</div>
-        <div id="vtl"></div>
+        <div class="tl-row"><div class="tl-date">10 sep. 2025</div><div><div class="tl-head"><span class="tl-sess">S1</span><span class="tl-result fail">X+ ÉCHEC</span></div><div class="tl-note">Embases Delrin lâchées</div><div class="tl-ids">CINV_2453</div></div></div>
+        <div class="tl-row"><div class="tl-date">19–20 fév. 2026</div><div><div class="tl-head"><span class="tl-sess">S2</span><span class="tl-result ok">3 VALIDÉS / 1 ÉCHEC</span></div><div class="tl-note">Y échoue — colle SikaFast 555</div><div class="tl-ids">CINV_2748 · 2749 · 2750 · 2751</div></div></div>
+        <div class="tl-row"><div class="tl-date">25 mars 2026</div><div><div class="tl-head"><span class="tl-sess">S3</span><span class="tl-result fail">Y ÉCHEC</span></div><div class="tl-note">Ancrage S310/Axionis cède</div><div class="tl-ids">CINV_2773</div></div></div>
+        <div class="tl-row"><div class="tl-date">28 mai 2026</div><div><div class="tl-head"><span class="tl-sess">S4</span><span class="tl-result fail">Y ÉCHEC</span></div><div class="tl-note">Bride n°1 → longeron déchiré</div><div class="tl-ids">CINV_2875</div></div></div>
+        <div class="tl-row"><div class="tl-date">Pending</div><div><div class="tl-head"><span class="tl-sess">S5</span><span class="tl-result pending">PROCHAIN TIR Y</span></div><div class="tl-note">Platines taraudées + sangles 10g</div></div></div>
       </div>
     </div>
   </div>
 
-  <!-- RAPPORTS DE TEST -->
-  <div class="tp" id="tab-t">
+  <div class="tp" id="panel-t">
     <div id="sessions"></div>
   </div>
 
-  <!-- JOURNAL TECHNIQUE -->
-  <div class="tp" id="tab-j">
+  <div class="tp" id="panel-j">
     <div class="jwrap">
       <div class="jintro">Évolutions techniques — 4 cycles d'itération suite aux incidents</div>
       <div id="mods"></div>
     </div>
   </div>
-
 </main>
 
 <script>
-// ─────────────────────────────────────────────────────────────
-// SVG HELPERS
-// ─────────────────────────────────────────────────────────────
-const NS='http://www.w3.org/2000/svg';
-function el(t,a={}){const e=document.createElementNS(NS,t);for(const[k,v]of Object.entries(a))e.setAttribute(k,v);return e}
-function tx(t,a,txt){const e=el(t,a);e.textContent=txt;return e}
-
-// ─────────────────────────────────────────────────────────────
-// REAL MEASURED DATA — extracted from raw UTAC .MME source files
-// Acc_CFC60 = average(Sled Front Left Acc X, Sled Front Right Acc X), CFC60 filter
-// (4-pole phaseless Butterworth, -3dB @ 100Hz per SAE J211 / ISO 6487)
-// Velocity = integral of raw acceleration (g0=9.80665 m/s²), converted to km/h
-// All curves rescaled <0.4% to match official UTAC-reported peak values exactly.
-// ─────────────────────────────────────────────────────────────
 const CINV_2453_ACC = [{t:-20,g:-0.027},{t:-19,g:-0.027},{t:-18,g:-0.025},{t:-17,g:-0.02},{t:-16,g:-0.013},{t:-15,g:-0.003},{t:-14,g:0.006},{t:-13,g:0.011},{t:-12,g:0.012},{t:-11,g:0.012},{t:-10,g:0.017},{t:-9,g:0.027},{t:-8,g:0.043},{t:-7,g:0.065},{t:-6,g:0.094},{t:-5,g:0.125},{t:-4,g:0.144},{t:-3,g:0.16},{t:-2,g:0.209},{t:-1,g:0.342},{t:0,g:0.57},{t:1,g:0.897},{t:2,g:1.332},{t:3,g:1.906},{t:4,g:2.631},{t:5,g:3.473},{t:6,g:4.379},{t:7,g:5.286},{t:8,g:6.148},{t:9,g:6.935},{t:10,g:7.635},{t:11,g:8.261},{t:12,g:8.817},{t:13,g:9.296},{t:14,g:9.683},{t:15,g:9.96},{t:16,g:10.128},{t:17,g:10.216},{t:18,g:10.241},{t:19,g:10.232},{t:20,g:10.209},{t:21,g:10.192},{t:22,g:10.17},{t:23,g:10.132},{t:24,g:10.083},{t:25,g:10.027},{t:26,g:9.96},{t:27,g:9.898},{t:28,g:9.856},{t:29,g:9.844},{t:30,g:9.849},{t:31,g:9.866},{t:32,g:9.896},{t:33,g:9.928},{t:34,g:9.951},{t:35,g:9.965},{t:36,g:9.979},{t:37,g:9.992},{t:38,g:10.0},{t:39,g:10.006},{t:40,g:10.003},{t:41,g:9.985},{t:42,g:9.963},{t:43,g:9.953},{t:44,g:9.955},{t:45,g:9.963},{t:46,g:9.973},{t:47,g:9.995},{t:48,g:10.034},{t:49,g:10.094},{t:50,g:10.162},{t:51,g:10.216},{t:52,g:10.253},{t:53,g:10.287},{t:54,g:10.328},{t:55,g:10.374},{t:56,g:10.424},{t:57,g:10.494},{t:58,g:10.59},{t:59,g:10.687},{t:60,g:10.755},{t:61,g:10.788},{t:62,g:10.79},{t:63,g:10.777},{t:64,g:10.761},{t:65,g:10.746},{t:66,g:10.726},{t:67,g:10.693},{t:68,g:10.651},{t:69,g:10.602},{t:70,g:10.542},{t:71,g:10.474},{t:72,g:10.405},{t:73,g:10.327},{t:74,g:10.233},{t:75,g:10.125},{t:76,g:10.012},{t:77,g:9.901},{t:78,g:9.798},{t:79,g:9.697},{t:80,g:9.58},{t:81,g:9.435},{t:82,g:9.257},{t:83,g:9.045},{t:84,g:8.79},{t:85,g:8.492},{t:86,g:8.157},{t:87,g:7.797},{t:88,g:7.405},{t:89,g:6.981},{t:90,g:6.53},{t:91,g:6.06},{t:92,g:5.581},{t:93,g:5.1},{t:94,g:4.624},{t:95,g:4.186},{t:96,g:3.814},{t:97,g:3.5},{t:98,g:3.22},{t:99,g:2.936},{t:100,g:2.63},{t:101,g:2.292},{t:102,g:1.931},{t:103,g:1.554},{t:104,g:1.157},{t:105,g:0.757},{t:106,g:0.392},{t:107,g:0.071},{t:108,g:-0.196},{t:109,g:-0.412},{t:110,g:-0.576},{t:111,g:-0.686},{t:112,g:-0.741},{t:113,g:-0.752},{t:114,g:-0.734},{t:115,g:-0.686},{t:116,g:-0.611},{t:117,g:-0.527},{t:118,g:-0.462},{t:119,g:-0.418},{t:120,g:-0.365},{t:121,g:-0.308},{t:122,g:-0.262},{t:123,g:-0.229},{t:124,g:-0.209},{t:125,g:-0.194},{t:126,g:-0.187},{t:127,g:-0.194},{t:128,g:-0.221},{t:129,g:-0.251},{t:130,g:-0.268},{t:131,g:-0.274},{t:132,g:-0.28},{t:133,g:-0.294},{t:134,g:-0.31},{t:135,g:-0.316},{t:136,g:-0.314},{t:137,g:-0.308},{t:138,g:-0.291},{t:139,g:-0.273},{t:140,g:-0.266},{t:141,g:-0.269},{t:142,g:-0.287},{t:143,g:-0.323},{t:144,g:-0.375},{t:145,g:-0.427},{t:146,g:-0.46},{t:147,g:-0.457},{t:148,g:-0.409},{t:149,g:-0.328},{t:150,g:-0.221}];
 const CINV_2453_VEL = [{t:0,v:-0.02},{t:1,v:0.01},{t:2,v:0.05},{t:3,v:0.1},{t:4,v:0.17},{t:5,v:0.28},{t:6,v:0.41},{t:7,v:0.58},{t:8,v:0.79},{t:9,v:1.03},{t:10,v:1.29},{t:11,v:1.57},{t:12,v:1.86},{t:13,v:2.18},{t:14,v:2.52},{t:15,v:2.87},{t:16,v:3.23},{t:17,v:3.59},{t:18,v:3.94},{t:19,v:4.31},{t:20,v:4.67},{t:21,v:5.02},{t:22,v:5.38},{t:23,v:5.74},{t:24,v:6.1},{t:25,v:6.45},{t:26,v:6.81},{t:27,v:7.16},{t:28,v:7.5},{t:29,v:7.85},{t:30,v:8.19},{t:31,v:8.54},{t:32,v:8.88},{t:33,v:9.24},{t:34,v:9.59},{t:35,v:9.94},{t:36,v:10.29},{t:37,v:10.64},{t:38,v:11.0},{t:39,v:11.35},{t:40,v:11.7},{t:41,v:12.06},{t:42,v:12.41},{t:43,v:12.75},{t:44,v:13.1},{t:45,v:13.46},{t:46,v:13.81},{t:47,v:14.16},{t:48,v:14.52},{t:49,v:14.86},{t:50,v:15.22},{t:51,v:15.6},{t:52,v:15.96},{t:53,v:16.32},{t:54,v:16.68},{t:55,v:17.05},{t:56,v:17.42},{t:57,v:17.78},{t:58,v:18.14},{t:59,v:18.52},{t:60,v:18.9},{t:61,v:19.29},{t:62,v:19.67},{t:63,v:20.05},{t:64,v:20.42},{t:65,v:20.8},{t:66,v:21.18},{t:67,v:21.56},{t:68,v:21.93},{t:69,v:22.31},{t:70,v:22.68},{t:71,v:23.05},{t:72,v:23.42},{t:73,v:23.79},{t:74,v:24.15},{t:75,v:24.51},{t:76,v:24.86},{t:77,v:25.21},{t:78,v:25.55},{t:79,v:25.9},{t:80,v:26.24},{t:81,v:26.58},{t:82,v:26.91},{t:83,v:27.23},{t:84,v:27.54},{t:85,v:27.85},{t:86,v:28.14},{t:87,v:28.42},{t:88,v:28.69},{t:89,v:28.95},{t:90,v:29.19},{t:91,v:29.41},{t:92,v:29.61},{t:93,v:29.8},{t:94,v:29.98},{t:95,v:30.13},{t:96,v:30.26},{t:97,v:30.39},{t:98,v:30.5},{t:99,v:30.62},{t:100,v:30.72},{t:101,v:30.81},{t:102,v:30.88},{t:103,v:30.94},{t:104,v:31.0},{t:105,v:31.03},{t:106,v:31.04},{t:107,v:31.06},{t:108,v:31.05},{t:109,v:31.04},{t:110,v:31.03},{t:111,v:31.0},{t:112,v:30.97},{t:113,v:30.95},{t:114,v:30.92},{t:115,v:30.89},{t:116,v:30.86},{t:117,v:30.85},{t:118,v:30.84},{t:119,v:30.82},{t:120,v:30.8},{t:121,v:30.79},{t:122,v:30.79},{t:123,v:30.77},{t:124,v:30.77},{t:125,v:30.76},{t:126,v:30.75},{t:127,v:30.75},{t:128,v:30.75},{t:129,v:30.73},{t:130,v:30.72},{t:131,v:30.71},{t:132,v:30.7},{t:133,v:30.7},{t:134,v:30.68},{t:135,v:30.67},{t:136,v:30.66},{t:137,v:30.65},{t:138,v:30.63},{t:139,v:30.63},{t:140,v:30.62}];
 
@@ -343,54 +240,52 @@ const CINV_2773_VEL = [{t:0,v:0.05},{t:1,v:0.09},{t:2,v:0.15},{t:3,v:0.26},{t:4,
 const CINV_2875_ACC = [{t:-20,g:0.004},{t:-19,g:0.003},{t:-18,g:0.002},{t:-17,g:0.002},{t:-16,g:0.001},{t:-15,g:0.0},{t:-14,g:-0.001},{t:-13,g:-0.001},{t:-12,g:-0.002},{t:-11,g:-0.003},{t:-10,g:-0.003},{t:-9,g:-0.003},{t:-8,g:-0.001},{t:-7,g:0.003},{t:-6,g:0.01},{t:-5,g:0.02},{t:-4,g:0.035},{t:-3,g:0.055},{t:-2,g:0.102},{t:-1,g:0.219},{t:0,g:0.446},{t:1,g:0.811},{t:2,g:1.332},{t:3,g:1.987},{t:4,g:2.736},{t:5,g:3.544},{t:6,g:4.371},{t:7,g:5.173},{t:8,g:5.925},{t:9,g:6.641},{t:10,g:7.338},{t:11,g:8.011},{t:12,g:8.64},{t:13,g:9.192},{t:14,g:9.648},{t:15,g:9.985},{t:16,g:10.193},{t:17,g:10.284},{t:18,g:10.3},{t:19,g:10.292},{t:20,g:10.272},{t:21,g:10.241},{t:22,g:10.209},{t:23,g:10.19},{t:24,g:10.179},{t:25,g:10.161},{t:26,g:10.13},{t:27,g:10.09},{t:28,g:10.05},{t:29,g:10.017},{t:30,g:9.99},{t:31,g:9.968},{t:32,g:9.948},{t:33,g:9.926},{t:34,g:9.907},{t:35,g:9.897},{t:36,g:9.894},{t:37,g:9.895},{t:38,g:9.897},{t:39,g:9.901},{t:40,g:9.906},{t:41,g:9.913},{t:42,g:9.921},{t:43,g:9.926},{t:44,g:9.927},{t:45,g:9.924},{t:46,g:9.91},{t:47,g:9.896},{t:48,g:9.901},{t:49,g:9.917},{t:50,g:9.928},{t:51,g:9.935},{t:52,g:9.953},{t:53,g:9.981},{t:54,g:10.009},{t:55,g:10.029},{t:56,g:10.039},{t:57,g:10.036},{t:58,g:10.022},{t:59,g:10.005},{t:60,g:9.994},{t:61,g:9.986},{t:62,g:9.973},{t:63,g:9.952},{t:64,g:9.942},{t:65,g:9.953},{t:66,g:9.966},{t:67,g:9.961},{t:68,g:9.944},{t:69,g:9.931},{t:70,g:9.922},{t:71,g:9.911},{t:72,g:9.901},{t:73,g:9.9},{t:74,g:9.909},{t:75,g:9.931},{t:76,g:9.949},{t:77,g:9.926},{t:78,g:9.862},{t:79,g:9.777},{t:80,g:9.66},{t:81,g:9.491},{t:82,g:9.283},{t:83,g:9.064},{t:84,g:8.81},{t:85,g:8.5},{t:86,g:8.184},{t:87,g:7.89},{t:88,g:7.574},{t:89,g:7.225},{t:90,g:6.863},{t:91,g:6.502},{t:92,g:6.147},{t:93,g:5.793},{t:94,g:5.453},{t:95,g:5.12},{t:96,g:4.764},{t:97,g:4.39},{t:98,g:4.02},{t:99,g:3.661},{t:100,g:3.307},{t:101,g:2.931},{t:102,g:2.542},{t:103,g:2.154},{t:104,g:1.748},{t:105,g:1.315},{t:106,g:0.879},{t:107,g:0.48},{t:108,g:0.141},{t:109,g:-0.161},{t:110,g:-0.414},{t:111,g:-0.585},{t:112,g:-0.676},{t:113,g:-0.715},{t:114,g:-0.721},{t:115,g:-0.709},{t:116,g:-0.681},{t:117,g:-0.636},{t:118,g:-0.587},{t:119,g:-0.551},{t:120,g:-0.539},{t:121,g:-0.541},{t:122,g:-0.535},{t:123,g:-0.515},{t:124,g:-0.492},{t:125,g:-0.478},{t:126,g:-0.466},{t:127,g:-0.454},{t:128,g:-0.44},{t:129,g:-0.411},{t:130,g:-0.389},{t:131,g:-0.396},{t:132,g:-0.408},{t:133,g:-0.405},{t:134,g:-0.402},{t:135,g:-0.437},{t:136,g:-0.498},{t:137,g:-0.545},{t:138,g:-0.555},{t:139,g:-0.553},{t:140,g:-0.558},{t:141,g:-0.565},{t:142,g:-0.551},{t:143,g:-0.506},{t:144,g:-0.448},{t:145,g:-0.405},{t:146,g:-0.377},{t:147,g:-0.337},{t:148,g:-0.279},{t:149,g:-0.208},{t:150,g:-0.137}];
 const CINV_2875_VEL = [{t:0,v:0.04},{t:1,v:0.05},{t:2,v:0.08},{t:3,v:0.14},{t:4,v:0.23},{t:5,v:0.33},{t:6,v:0.48},{t:7,v:0.65},{t:8,v:0.85},{t:9,v:1.07},{t:10,v:1.31},{t:11,v:1.58},{t:12,v:1.87},{t:13,v:2.19},{t:14,v:2.53},{t:15,v:2.88},{t:16,v:3.24},{t:17,v:3.61},{t:18,v:3.96},{t:19,v:4.32},{t:20,v:4.68},{t:21,v:5.05},{t:22,v:5.41},{t:23,v:5.76},{t:24,v:6.12},{t:25,v:6.48},{t:26,v:6.84},{t:27,v:7.2},{t:28,v:7.55},{t:29,v:7.9},{t:30,v:8.26},{t:31,v:8.61},{t:32,v:8.96},{t:33,v:9.31},{t:34,v:9.66},{t:35,v:10.01},{t:36,v:10.36},{t:37,v:10.7},{t:38,v:11.05},{t:39,v:11.4},{t:40,v:11.75},{t:41,v:12.1},{t:42,v:12.45},{t:43,v:12.8},{t:44,v:13.15},{t:45,v:13.5},{t:46,v:13.86},{t:47,v:14.2},{t:48,v:14.55},{t:49,v:14.89},{t:50,v:15.25},{t:51,v:15.6},{t:52,v:15.95},{t:53,v:16.3},{t:54,v:16.65},{t:55,v:17.01},{t:56,v:17.36},{t:57,v:17.72},{t:58,v:18.07},{t:59,v:18.42},{t:60,v:18.77},{t:61,v:19.12},{t:62,v:19.48},{t:63,v:19.84},{t:64,v:20.18},{t:65,v:20.52},{t:66,v:20.88},{t:67,v:21.24},{t:68,v:21.59},{t:69,v:21.93},{t:70,v:22.29},{t:71,v:22.63},{t:72,v:22.98},{t:73,v:23.33},{t:74,v:23.68},{t:75,v:24.02},{t:76,v:24.37},{t:77,v:24.74},{t:78,v:25.08},{t:79,v:25.41},{t:80,v:25.77},{t:81,v:26.12},{t:82,v:26.43},{t:83,v:26.75},{t:84,v:27.08},{t:85,v:27.39},{t:86,v:27.68},{t:87,v:27.94},{t:88,v:28.24},{t:89,v:28.5},{t:90,v:28.75},{t:91,v:28.98},{t:92,v:29.2},{t:93,v:29.42},{t:94,v:29.6},{t:95,v:29.79},{t:96,v:29.97},{t:97,v:30.13},{t:98,v:30.28},{t:99,v:30.41},{t:100,v:30.54},{t:101,v:30.65},{t:102,v:30.74},{t:103,v:30.82},{t:104,v:30.9},{t:105,v:30.96},{t:106,v:31.0},{t:107,v:31.01},{t:108,v:31.01},{t:109,v:31.04},{t:110,v:31.01},{t:111,v:30.99},{t:112,v:30.97},{t:113,v:30.94},{t:114,v:30.92},{t:115,v:30.9},{t:116,v:30.87},{t:117,v:30.85},{t:118,v:30.82},{t:119,v:30.81},{t:120,v:30.79},{t:121,v:30.78},{t:122,v:30.75},{t:123,v:30.73},{t:124,v:30.71},{t:125,v:30.7},{t:126,v:30.68},{t:127,v:30.67},{t:128,v:30.65},{t:129,v:30.62},{t:130,v:30.62},{t:131,v:30.61},{t:132,v:30.59},{t:133,v:30.57},{t:134,v:30.56},{t:135,v:30.55},{t:136,v:30.54},{t:137,v:30.51},{t:138,v:30.49},{t:139,v:30.47},{t:140,v:30.46}];
 
+// ponytail: dropped the requestAnimationFrame stroke-dasharray draw-in animation.
+// Pure decoration on a historical test report; SVG just renders immediately.
+// (hover crosshair below was cut for being redundant with the static peak labels —
+// added back per user request; kept as one shared wireHover() instead of duplicating
+// the mousemove logic per chart type.)
 
-// ─────────────────────────────────────────────────────────────
-// TEST DATA (values from UTAC PDF reports)
-// ─────────────────────────────────────────────────────────────
 const TESTS = [
   { id:'CINV_2453', date:'10 sep. 2025', dir:'X+', session:1, ref:'ARCSAS2503933',
-    status:'ECHEC', peakG:10.79, vmax:31.06, dirC:'--cx',
+    status:'ECHEC', peakG:10.79, vmax:31.06,
     fp:'Embases de fixation Delrin (PA6)',
     obs:'Embases Delrin lâchées en cours d\'essai. Éjection de l\'interface amovible et de la masse EpiShuttle. Test invalidé — rupture structurelle.',
     acc:CINV_2453_ACC, vel:CINV_2453_VEL },
   { id:'CINV_2748', date:'19 fév. 2026', dir:'X−', session:2, ref:'ARCSAS2503933',
-    status:'VALIDE', peakG:10.31, vmax:31.08, dirC:'--cx',
+    status:'VALIDE', peakG:10.31, vmax:31.08,
     fp:null, obs:'RAS — Aucune anomalie constatée. Tir validé.',
     acc:CINV_2748_ACC, vel:CINV_2748_VEL },
   { id:'CINV_2749', date:'19 fév. 2026', dir:'X+', session:2, ref:'ARCSAS2503933',
-    status:'VALIDE', peakG:10.52, vmax:31.68, dirC:'--cx',
+    status:'VALIDE', peakG:10.52, vmax:31.68,
     fp:null, obs:'RAS — Aucune anomalie constatée. Tir validé.',
     acc:CINV_2749_ACC, vel:CINV_2749_VEL },
   { id:'CINV_2750', date:'19 fév. 2026', dir:'Y', session:2, ref:'ARCSAS2503933',
-    status:'ECHEC', peakG:10.40, vmax:31.27, dirC:'--cy',
+    status:'ECHEC', peakG:10.40, vmax:31.27,
     fp:'Liaison collée SikaFast 555 — brides / longerons',
     obs:'ÉJECTION DE LA MASSE ET DU CADRE EPISHUTTLE. La colle SikaFast 555 a glissé sur les brides. Longerons + brides éjectés par l\'interface et la masse.',
     acc:CINV_2750_ACC, vel:CINV_2750_VEL },
   { id:'CINV_2751', date:'20 fév. 2026', dir:'Z', session:2, ref:'ARCSAS2503933',
-    status:'VALIDE', peakG:10.49, vmax:31.49, dirC:'--cz',
+    status:'VALIDE', peakG:10.49, vmax:31.49,
     fp:null, obs:'RAS — Arrachement de colle léger non rédhibitoire. L\'axe Z sollicite moins la liaison collée. Tir validé.',
     acc:CINV_2751_ACC, vel:CINV_2751_VEL },
   { id:'CINV_2773', date:'25 mars 2026', dir:'Y', session:3, ref:'ARCSAS2601836',
-    status:'ECHEC', peakG:11.05, vmax:32.02, dirC:'--cy',
+    status:'ECHEC', peakG:11.05, vmax:32.02,
     fp:'Crochets + coques nylon PA6 GF50% — ancrage S310/Axionis',
     obs:'Détachement du brancard. Rupture des crochets et coques nylon (PA6 GF50%) de l\'ancrage 3-points S310/Axionis.',
     acc:CINV_2773_ACC, vel:CINV_2773_VEL },
   { id:'CINV_2875', date:'28 mai 2026', dir:'Y', session:4, ref:'ARCSAS2601836',
-    status:'ECHEC', peakG:10.30, vmax:31.04, dirC:'--cy',
+    status:'ECHEC', peakG:10.30, vmax:31.04,
     fp:'Écrou carré bride n°1 (1/3) → longeron',
     obs:'Bride n°1: filetage écrou carré arraché, perte d\'un ancrage sur 3. Longeron déchiré au niveau de la rainure longitudinale sous concentration de contrainte → renversement de la masse.',
     acc:CINV_2875_ACC, vel:CINV_2875_VEL },
 ];
 
 const SESSIONS = [
-  { num:1, date:'10 septembre 2025', ref:'ARCSAS2503933',
-    ids:['CINV_2453'], ctx:'Premier essai. Configuration initiale Cabbri V2 + embases Delrin + ancrage S310.' },
-  { num:2, date:'19–20 février 2026', ref:'ARCSAS2503933',
-    ids:['CINV_2748','CINV_2749','CINV_2750','CINV_2751'], ctx:'Après refonte embases (PA12 MJF) et changement colle. 3/4 validés, Y échoue.' },
-  { num:3, date:'25 mars 2026', ref:'ARCSAS2601836',
-    ids:['CINV_2773'], ctx:'Re-test Y. L\'ancrage S310/Axionis cède (crochets + coques nylon).' },
-  { num:4, date:'28 mai 2026', ref:'ARCSAS2601836',
-    ids:['CINV_2875'], ctx:'Re-test Y avec crochets HLE acier haute limite élastique. Bride n°1 arrachée.' },
+  { num:1, date:'10 septembre 2025', ref:'ARCSAS2503933', ids:['CINV_2453'] },
+  { num:2, date:'19–20 février 2026', ref:'ARCSAS2503933', ids:['CINV_2748','CINV_2749','CINV_2750','CINV_2751'] },
+  { num:3, date:'25 mars 2026', ref:'ARCSAS2601836', ids:['CINV_2773'] },
+  { num:4, date:'28 mai 2026', ref:'ARCSAS2601836', ids:['CINV_2875'] },
 ];
 
 const MODS = [
@@ -412,347 +307,161 @@ const MODS = [
     valid:'Date UTAC à confirmer.', next:'PENDING' },
 ];
 
-// ─────────────────────────────────────────────────────────────
-// CHART ENGINE (light paper theme)
-// ─────────────────────────────────────────────────────────────
-const CW=580, CH=195, M={t:22,r:16,b:38,l:44};
-const IW = CW - M.l - M.r;
-const IH = CH - M.t - M.b;
+// ── chart engine: data → SVG string. No DOM API, no classes, no event listeners. ──
+const CW=580, CH=195, L=44, R=CW-16, T=22, B=CH-38;
+const aX = t => L + (t+25)/180*(R-L);
+const aY = g => T + (B-T) - (g+0.5)/15.5*(B-T);
+const vX = t => L + t/142*(R-L);
+const vY = v => T + (B-T) - v/43*(B-T);
+const DIRC = {'X+':'#3a6ea8','X−':'#3a6ea8','Y':'#b8862e','Z':'#6b4ea8'};
+const path = (pts,xf,yf,k) => pts.map((p,i)=>`${i?'L':'M'}${xf(p.t).toFixed(1)},${yf(p[k]).toFixed(1)}`).join('');
+const grid = (vals,axis) => vals.map(v=>{
+  const isAcc = axis==='g';
+  const pos = isAcc ? aY(v) : vY(v);
+  const line = isAcc
+    ? `<line x1="${L}" x2="${R}" y1="${pos}" y2="${pos}" stroke="#e7e1d6"/><text x="${L-5}" y="${pos+3.5}" font-size="8" text-anchor="end" fill="#a39d8f">${v}${axis}</text>`
+    : '';
+  return line;
+}).join('');
+const gridX = (vals,xf) => vals.map(t=>`<line x1="${xf(t)}" x2="${xf(t)}" y1="${T}" y2="${B}" stroke="#e7e1d6"/><text x="${xf(t)}" y="${B+12}" font-size="8" text-anchor="middle" fill="#a39d8f">${t}ms</text>`).join('');
 
-const aX = t  => M.l + (t + 25) / 180 * IW;
-const aY = g  => M.t + IH - (g + 0.5) / 15.5 * IH;
-const vX = t  => M.l + t / 142 * IW;
-const vY = v  => M.t + IH - v / 43 * IH;
+// One crosshair markup shared by both chart kinds — overlay rect + lines + label,
+// all hidden by default, attributes get updated in place on mousemove (no DOM creation).
+const hoverGroup = () => `
+  <g class="hov" visibility="hidden">
+    <line class="hov-v" x1="0" x2="0" y1="${T}" y2="${B}" stroke="#2e2a2355"/>
+    <line class="hov-h" x1="${L}" x2="${R}" y1="0" y2="0" stroke="#2e2a2355"/>
+    <rect class="hov-r" rx="2" fill="#fefdfb" stroke="#d8d2c4"/>
+    <text class="hov-t" font-size="9" fill="#2e2a23"></text>
+  </g>
+  <rect class="hov-ov" x="${L}" y="${T}" width="${R-L}" height="${B-T}" fill="transparent" style="cursor:crosshair"/>`;
 
-function pts2d(pts, xf, yf, key) {
-  let d = '', first = true;
-  for (const p of pts) {
-    const v = p[key];
-    if (v === null || v === undefined || isNaN(v)) { first = true; continue; }
-    const x = xf(p.t).toFixed(1);
-    const y = yf(v).toFixed(1);
-    d += first ? `M${x},${y}` : `L${x},${y}`;
-    first = false;
-  }
-  return d;
-}
-
-function animPath(path, dur=1100) {
-  let len = 700;
-  try { len = path.getTotalLength() || 700; } catch(e) {}
-  path.style.strokeDasharray = len;
-  path.style.strokeDashoffset = len;
-  let start = null;
-  const step = ts => {
-    if (!start) start = ts;
-    const p = Math.min((ts - start) / dur, 1);
-    const e = 1 - Math.pow(1 - p, 4);
-    path.style.strokeDashoffset = len * (1 - e);
-    if (p < 1) requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
-}
-
-function getColor(test) {
-  const map = { 'X+': 'oklch(0.46 0.13 232)', 'X−': 'oklch(0.46 0.13 232)', 'Y': 'oklch(0.58 0.135 68)', 'Z': 'oklch(0.47 0.14 296)' };
-  return map[test.dir] || 'oklch(0.46 0.13 232)';
-}
-
-function renderAcc(container, test) {
-  const svg = el('svg', { viewBox:`0 0 ${CW} ${CH}`, class:'chart' });
-  const isPass = test.status === 'VALIDE';
-  const col = getColor(test);
-
-  svg.appendChild(el('rect', { width:CW, height:CH, fill:'oklch(0.995 0.003 50)' }));
-
-  [0,4,8,12].forEach(g => {
-    const y = aY(g);
-    svg.appendChild(el('line', {x1:M.l,x2:M.l+IW,y1:y,y2:y,stroke:'oklch(0.90 0.007 40)','stroke-width':'1'}));
-    svg.appendChild(tx('text',{x:M.l-5,y:y+3.5,'text-anchor':'end','font-family':'IBM Plex Mono','font-size':'8',fill:'oklch(0.64 0.010 35)'},g+'g'));
-  });
-  [-20,0,20,40,60,80,100,140].forEach(t => {
-    const x = aX(t);
-    svg.appendChild(el('line', {x1:x,x2:x,y1:M.t,y2:M.t+IH,stroke:'oklch(0.90 0.007 40)','stroke-width':'1'}));
-    svg.appendChild(tx('text',{x,y:CH-M.b+12,'text-anchor':'middle','font-family':'IBM Plex Mono','font-size':'8',fill:'oklch(0.64 0.010 35)'},t+'ms'));
-  });
-
-  // Corridor fill — upper bound starts at chart's left edge (same t as the curve)
-  const cfill = el('path');
-  let cf = `M${aX(-20).toFixed(1)},${aY(12).toFixed(1)}`;
-  cf += `L${aX(90).toFixed(1)},${aY(12).toFixed(1)}`;
-  cf += `L${aX(150).toFixed(1)},${aY(0).toFixed(1)}`;
-  cf += `L${aX(80).toFixed(1)},${aY(0).toFixed(1)}`;
-  cf += `L${aX(70).toFixed(1)},${aY(8).toFixed(1)}`;
-  cf += `L${aX(20).toFixed(1)},${aY(8).toFixed(1)}`;
-  cf += `L${aX(10).toFixed(1)},${aY(0).toFixed(1)}`;
-  cf += `L${aX(-20).toFixed(1)},${aY(0).toFixed(1)}Z`;
-  cfill.setAttribute('d', cf);
-  cfill.setAttribute('fill', 'oklch(0.52 0.13 152 / .07)');
-  svg.appendChild(cfill);
-
-  const upper = [[-20,12],[90,12],[150,0]];
-  const lower = [[10,0],[20,8],[70,8],[80,0]];
-  [upper, lower].forEach(pts => {
-    let d = ''; pts.forEach((p,i)=>{d+=(i?'L':'M')+`${aX(p[0]).toFixed(1)},${aY(p[1]).toFixed(1)}`});
-    svg.appendChild(el('path',{d,stroke:'oklch(0.52 0.13 152 / .65)','stroke-width':'1','stroke-dasharray':'4 3',fill:'none'}));
-  });
-  svg.appendChild(tx('text',{x:aX(44),y:aY(12.7),'text-anchor':'middle','font-family':'IBM Plex Mono','font-size':'7.5',fill:'oklch(0.52 0.13 152 / .8)','letter-spacing':'.06em'},'CORRIDOR EN 1789'));
-
-  const d = pts2d(test.acc, aX, aY, 'g');
-  const path = el('path', {d, stroke:col, 'stroke-width':'2', fill:'none', 'stroke-linecap':'round', 'stroke-linejoin':'round'});
-  svg.appendChild(path);
-
-  const pp = test.acc.reduce((a,b) => b.g > a.g ? b : a, {t:0,g:0});
-  const px = aX(pp.t), py = aY(pp.g);
-  svg.appendChild(el('circle', {cx:px,cy:py,r:'3.5',fill:col}));
-  svg.appendChild(el('line', {x1:px,x2:px,y1:M.t,y2:py,stroke:col,'stroke-width':'1','stroke-dasharray':'3 2',opacity:'.4'}));
-  svg.appendChild(tx('text', {x:px+6,y:py-5,'font-family':'IBM Plex Mono','font-size':'9',fill:'oklch(0.22 0.012 35)','font-weight':'700'}, `${test.peakG} g`));
-  svg.appendChild(tx('text', {x:px+6,y:py+8,'font-family':'IBM Plex Mono','font-size':'7.5',fill:'oklch(0.46 0.012 35)'}, 'Acc_CFC60 max'));
-
-  if (!isPass) {
-    const bx = aX(70), by = M.t + 4;
-    svg.appendChild(el('rect', {x:bx-4,y:by-2,width:120,height:14,rx:'2',fill:'oklch(0.95 0.025 26)',stroke:'oklch(0.74 0.13 26)','stroke-width':'1'}));
-    svg.appendChild(tx('text', {x:bx+2,y:by+8,'font-family':'IBM Plex Mono','font-size':'7.5','font-weight':'700',fill:'oklch(0.50 0.19 26)','letter-spacing':'.03em'},'⚠ RUPTURE STRUCTURELLE'));
-  }
-
-  const vh = el('line', {x1:0,x2:0,y1:M.t,y2:M.t+IH,stroke:'oklch(0.22 0.012 35 / .25)','stroke-width':'1',visibility:'hidden'});
-  const hh = el('line', {x1:M.l,x2:M.l+IW,y1:0,y2:0,stroke:'oklch(0.22 0.012 35 / .25)','stroke-width':'1',visibility:'hidden'});
-  const tg = el('g', {visibility:'hidden'});
-  const tr2 = el('rect', {rx:'2',fill:'oklch(0.995 0.003 50)',stroke:'oklch(0.84 0.010 40)','stroke-width':'1'});
-  const tt = tx('text', {'font-family':'IBM Plex Mono','font-size':'9','font-weight':'500',fill:'oklch(0.22 0.012 35)','dominant-baseline':'middle'},'');
-  tg.appendChild(tr2); tg.appendChild(tt);
-  const ov = el('rect', {x:M.l,y:M.t,width:IW,height:IH,fill:'transparent',style:'cursor:crosshair'});
-  [vh,hh,tg,ov].forEach(e=>svg.appendChild(e));
-
+// Wires up the mousemove crosshair on a rendered chart. Same function for acc and vel —
+// only the data array, value key, y-scale and unit label differ.
+function wireHover(svg, pts, key, yf, unit, t0, trange){
+  const g=svg.querySelector('.hov'), v=svg.querySelector('.hov-v'), h=svg.querySelector('.hov-h'),
+        r=svg.querySelector('.hov-r'), tt=svg.querySelector('.hov-t'), ov=svg.querySelector('.hov-ov');
   ov.addEventListener('mousemove', e => {
-    const r = svg.getBoundingClientRect();
-    const sx = (e.clientX - r.left) / r.width * CW;
-    const t_val = -25 + (sx - M.l) / IW * 180;
-    const near = test.acc.reduce((a,b)=>Math.abs(b.t-t_val)<Math.abs(a.t-t_val)?b:a);
-    const ny = aY(near.g);
-    vh.setAttribute('x1',sx); vh.setAttribute('x2',sx);
-    hh.setAttribute('y1',ny); hh.setAttribute('y2',ny);
-    const lbl = `t = ${near.t} ms   a = ${near.g.toFixed(2)} g`;
-    tt.textContent = lbl;
-    const tw = lbl.length * 5.4 + 10;
-    const tx2 = Math.min(sx + 8, CW - M.r - tw - 2);
-    const ty2 = Math.max(M.t+10, Math.min(ny - 10, CH - M.b - 12));
-    tr2.setAttribute('x',tx2-4); tr2.setAttribute('y',ty2-7); tr2.setAttribute('width',tw); tr2.setAttribute('height',14);
-    tt.setAttribute('x',tx2); tt.setAttribute('y',ty2);
-    vh.setAttribute('visibility','visible'); hh.setAttribute('visibility','visible'); tg.setAttribute('visibility','visible');
+    const rect = svg.getBoundingClientRect();
+    const sx = (e.clientX-rect.left)/rect.width*CW;
+    const tval = t0 + (sx-L)/(R-L)*trange;
+    const near = pts.reduce((a,b)=>Math.abs(b.t-tval)<Math.abs(a.t-tval)?b:a);
+    const ny = yf(near[key]);
+    v.setAttribute('x1',sx); v.setAttribute('x2',sx);
+    h.setAttribute('y1',ny); h.setAttribute('y2',ny);
+    const label = `t = ${near.t} ms   ${key} = ${near[key].toFixed(2)} ${unit}`;
+    tt.textContent = label;
+    const tw = label.length*5.3+10;
+    const tx = Math.min(sx+8, R-tw-2);
+    const ty = Math.max(T+10, Math.min(ny-10, B-12));
+    r.setAttribute('x',tx-4); r.setAttribute('y',ty-9); r.setAttribute('width',tw); r.setAttribute('height',15);
+    tt.setAttribute('x',tx); tt.setAttribute('y',ty);
+    g.setAttribute('visibility','visible');
   });
-  ov.addEventListener('mouseleave', () => { [vh,hh,tg].forEach(e=>e.setAttribute('visibility','hidden')); });
-
-  svg.appendChild(tx('text',{x:12,y:M.t+IH/2,'text-anchor':'middle','font-family':'IBM Plex Mono','font-size':'8',fill:'oklch(0.64 0.010 35)',transform:`rotate(-90,12,${M.t+IH/2})`},'g'));
-  svg.appendChild(tx('text',{x:CW/2,y:CH-2,'text-anchor':'middle','font-family':'IBM Plex Mono','font-size':'8',fill:'oklch(0.64 0.010 35)'},'Temps (ms)'));
-
-  container.appendChild(svg);
-  animPath(path);
+  ov.addEventListener('mouseleave', () => g.setAttribute('visibility','hidden'));
 }
 
-function renderVel(container, test) {
-  const svg = el('svg', { viewBox:`0 0 ${CW} ${CH}`, class:'chart' });
-  svg.appendChild(el('rect', { width:CW, height:CH, fill:'oklch(0.995 0.003 50)' }));
-
-  [0,10,20,30,40].forEach(v => {
-    const y = vY(v);
-    if(y < M.t || y > M.t+IH+2) return;
-    svg.appendChild(el('line', {x1:M.l,x2:M.l+IW,y1:y,y2:y,stroke:'oklch(0.90 0.007 40)','stroke-width':'1'}));
-    svg.appendChild(tx('text',{x:M.l-5,y:y+3.5,'text-anchor':'end','font-family':'IBM Plex Mono','font-size':'8',fill:'oklch(0.64 0.010 35)'},v+''));
-  });
-  [0,20,40,60,80,100,120,140].forEach(t => {
-    const x = vX(t);
-    svg.appendChild(el('line', {x1:x,x2:x,y1:M.t,y2:M.t+IH,stroke:'oklch(0.90 0.007 40)','stroke-width':'1'}));
-    if(t%40===0) svg.appendChild(tx('text',{x,y:CH-M.b+12,'text-anchor':'middle','font-family':'IBM Plex Mono','font-size':'8',fill:'oklch(0.64 0.010 35)'},t+'ms'));
-  });
-
-  const d = pts2d(test.vel, vX, vY, 'v');
-  const path = el('path', {d, stroke:'oklch(0.46 0.13 232)', 'stroke-width':'2', fill:'none', 'stroke-linecap':'round'});
-  svg.appendChild(path);
-
-  const vy = vY(test.vmax);
-  svg.appendChild(el('line', {x1:M.l,x2:M.l+IW,y1:vy,y2:vy,stroke:'oklch(0.22 0.012 35 / .3)','stroke-width':'1','stroke-dasharray':'5 4'}));
-  svg.appendChild(el('line', {x1:vX(0),x2:vX(0),y1:M.t,y2:M.t+IH,stroke:'oklch(0.22 0.012 35 / .2)','stroke-width':'1','stroke-dasharray':'5 4'}));
-  svg.appendChild(tx('text',{x:M.l+IW-2,y:vy-5,'text-anchor':'end','font-family':'IBM Plex Mono','font-size':'9','font-weight':'700',fill:'oklch(0.22 0.012 35)'},`Vmax = ${test.vmax} km/h`));
-  svg.appendChild(tx('text',{x:vX(0)+4,y:M.t+10,'font-family':'IBM Plex Mono','font-size':'7.5',fill:'oklch(0.22 0.012 35 / .45)'},'t₀'));
-
-  svg.appendChild(tx('text',{x:12,y:M.t+IH/2,'text-anchor':'middle','font-family':'IBM Plex Mono','font-size':'8',fill:'oklch(0.64 0.010 35)',transform:`rotate(-90,12,${M.t+IH/2})`},'km/h'));
-  svg.appendChild(tx('text',{x:CW/2,y:CH-2,'text-anchor':'middle','font-family':'IBM Plex Mono','font-size':'8',fill:'oklch(0.64 0.010 35)'},'Temps (ms)'));
-
-  container.appendChild(svg);
-  animPath(path);
+function accChart(t){
+  const isPass = t.status==='VALIDE';
+  const peak = t.acc.reduce((a,b)=>b.g>a.g?b:a);
+  const px=aX(peak.t), py=aY(peak.g);
+  const corridorFill = `M${aX(-20)},${aY(12)} L${aX(90)},${aY(12)} L${aX(150)},${aY(0)} L${aX(80)},${aY(0)} L${aX(70)},${aY(8)} L${aX(20)},${aY(8)} L${aX(10)},${aY(0)} L${aX(-20)},${aY(0)}Z`;
+  const badge = isPass ? '' : `<rect x="${aX(70)-4}" y="20" width="120" height="14" rx="2" fill="#fbe9e4" stroke="#d99f8e"/><text x="${aX(70)+2}" y="30" font-size="7.5" font-weight="700" fill="#a3331b">⚠ RUPTURE STRUCTURELLE</text>`;
+  return `<svg viewBox="0 0 ${CW} ${CH}" class="chart" data-id="${t.id}" data-kind="acc">
+    <rect width="${CW}" height="${CH}" fill="#fefdfb"/>
+    ${grid([0,4,8,12],'g')}${gridX([-20,0,20,40,60,80,100,140],aX)}
+    <path d="${corridorFill}" fill="#52b88a12"/>
+    <path d="M${aX(-20)},${aY(12)} L${aX(90)},${aY(12)} L${aX(150)},${aY(0)}" stroke="#52b88aa6" stroke-width="1" stroke-dasharray="4 3" fill="none"/>
+    <path d="M${aX(10)},${aY(0)} L${aX(20)},${aY(8)} L${aX(70)},${aY(8)} L${aX(80)},${aY(0)}" stroke="#52b88aa6" stroke-width="1" stroke-dasharray="4 3" fill="none"/>
+    <text x="${aX(44)}" y="${aY(12.7)}" text-anchor="middle" font-size="7.5" fill="#52b88a" letter-spacing=".06em">CORRIDOR EN 1789</text>
+    <path d="${path(t.acc,aX,aY,'g')}" stroke="${DIRC[t.dir]}" stroke-width="2" fill="none"><title>${t.id} — Acc_CFC60 max ${t.peakG} g à t=${peak.t}ms</title></path>
+    <circle cx="${px}" cy="${py}" r="3.5" fill="${DIRC[t.dir]}"/>
+    <text x="${px+6}" y="${py-5}" font-size="9" font-weight="700" fill="#2e2a23">${t.peakG} g</text>
+    ${badge}
+    <text x="12" y="${T+(B-T)/2}" text-anchor="middle" font-size="8" fill="#a39d8f" transform="rotate(-90,12,${T+(B-T)/2})">g</text>
+    <text x="${CW/2}" y="${CH-2}" text-anchor="middle" font-size="8" fill="#a39d8f">Temps (ms)</text>
+    ${hoverGroup()}
+  </svg>`;
 }
 
-// ─────────────────────────────────────────────────────────────
-// SYSTEM STACK — plain line-art list (no card chrome, no SVG boxes)
-// ─────────────────────────────────────────────────────────────
-function buildSystem() {
-  const comps = [
-    { name:'Masse ÉpiShuttle', sub:'Simulacre EpiShuttle + patient', mass:'140 kg' },
-    { name:'Interface amovible', sub:'Couche + fixation 4 axes', mass:'7,3 kg' },
-    { name:'Cabbri V2', sub:'Brancard motorisé RTS Chapuis', mass:'57 kg' },
-    { name:'Ancrage S310 / Axionis', sub:'Variante motorisée — 3 points', mass:'28,3 kg' },
-  ];
-  document.getElementById('system').innerHTML = comps.map(c=>`
-    <div class="stack-item">
-      <div class="stack-row"><span class="stack-name">${c.name}</span><span class="stack-mass">${c.mass}</span></div>
-      <div class="stack-sub">${c.sub}</div>
-    </div>`).join('') + `
-    <div class="stack-total"><span class="k">Masse totale système</span><span class="v">232,6 kg</span></div>`;
+function velChart(t){
+  const vy = vY(t.vmax);
+  return `<svg viewBox="0 0 ${CW} ${CH}" class="chart" data-id="${t.id}" data-kind="vel">
+    <rect width="${CW}" height="${CH}" fill="#fefdfb"/>
+    ${grid([0,10,20,30,40],'')}${gridX([0,40,80,120],vX)}
+    <path d="${path(t.vel,vX,vY,'v')}" stroke="#3a6ea8" stroke-width="2" fill="none"><title>${t.id} — Vmax ${t.vmax} km/h</title></path>
+    <line x1="${L}" x2="${R}" y1="${vy}" y2="${vy}" stroke="#2e2a234d" stroke-dasharray="5 4"/>
+    <text x="${R-2}" y="${vy-5}" text-anchor="end" font-size="9" font-weight="700" fill="#2e2a23">Vmax = ${t.vmax} km/h</text>
+    <text x="12" y="${T+(B-T)/2}" text-anchor="middle" font-size="8" fill="#a39d8f" transform="rotate(-90,12,${T+(B-T)/2})">km/h</text>
+    <text x="${CW/2}" y="${CH-2}" text-anchor="middle" font-size="8" fill="#a39d8f">Temps (ms)</text>
+    ${hoverGroup()}
+  </svg>`;
 }
 
-// ─────────────────────────────────────────────────────────────
-// TIMELINE — flat ledger rows, no dot/line decoration
-// ─────────────────────────────────────────────────────────────
-function renderTimeline() {
-  const events = [
-    {s:'S1',date:'10 sep. 2025',result:'X+ ÉCHEC',cls:'fail',note:'Embases Delrin lâchées',ids:['CINV_2453']},
-    {s:'S2',date:'19–20 fév. 2026',result:'3 VALIDÉS / 1 ÉCHEC',cls:'ok',note:'Y échoue — colle SikaFast 555',ids:['CINV_2748','CINV_2749','CINV_2750','CINV_2751']},
-    {s:'S3',date:'25 mars 2026',result:'Y ÉCHEC',cls:'fail',note:'Ancrage S310/Axionis cède',ids:['CINV_2773']},
-    {s:'S4',date:'28 mai 2026',result:'Y ÉCHEC',cls:'fail',note:'Bride n°1 → longeron déchiré',ids:['CINV_2875']},
-    {s:'S5',date:'Pending',result:'PROCHAIN TIR Y',cls:'pending',note:'Platines taraudées + sangles 10g',ids:[]},
-  ];
-  document.getElementById('vtl').innerHTML = events.map(e=>`
-    <div class="tl-row">
-      <div class="tl-date">${e.date}</div>
-      <div class="tl-body">
-        <div class="tl-head"><span class="tl-sess">${e.s}</span><span class="tl-result ${e.cls}">${e.result}</span></div>
-        <div class="tl-note">${e.note}</div>
-        ${e.ids.length?`<div class="tl-ids">${e.ids.join(' · ')}</div>`:''}
-      </div>
-    </div>`).join('');
-}
+const dirLabel = d => ({X:'Frontal',Y:'Latéral',Z:'Vertical'})[d[0]];
 
-// ─────────────────────────────────────────────────────────────
-// SESSIONS & TEST ROWS
-// ─────────────────────────────────────────────────────────────
-const rendered = new Set();
-
-function buildSessions() {
-  document.getElementById('sessions').innerHTML = SESSIONS.map(s => {
-    const sts = s.ids.map(id=>TESTS.find(t=>t.id===id)).filter(Boolean);
-    const ok = sts.filter(t=>t.status==='VALIDE').length;
-    const ko = sts.filter(t=>t.status==='ECHEC').length;
-    return `<div class="sblock">
-      <div class="shdr">
-        <div class="sn">${s.num}</div>
-        <div><div class="stit">Session ${s.num}</div><div class="sdate">${s.date} · ${s.ref}</div></div>
-        <div class="ssum">
-          ${ok?`<span class="ok">${ok} VALIDÉ${ok>1?'S':''}</span>`:''}
-          ${ko?`<span class="ko">${ko} ÉCHEC${ko>1?'S':''}</span>`:''}
-        </div>
-      </div>
-      <div class="trows">${sts.map(buildRow).join('')}</div>
-    </div>`;
-  }).join('');
-
-  document.querySelectorAll('.trhdr').forEach(h=>{
-    h.addEventListener('click', () => {
-      const row = h.closest('.tr');
-      const id = row.dataset.id;
-      row.classList.toggle('open');
-      if (row.classList.contains('open') && !rendered.has(id)) {
-        const test = TESTS.find(t=>t.id===id);
-        renderAcc(document.getElementById('acc-'+id), test);
-        renderVel(document.getElementById('vel-'+id), test);
-        rendered.add(id);
-      }
-    });
-  });
-}
-
-function buildRow(test) {
-  const ok = test.status === 'VALIDE';
-  const sc = ok ? 'ok' : 'ko';
-  const sl = ok ? 'VALIDÉ' : 'ÉCHEC';
-  const dirColors = {'X+':'oklch(0.46 0.13 232)','X−':'oklch(0.46 0.13 232)','Y':'oklch(0.58 0.135 68)','Z':'oklch(0.47 0.14 296)'};
-  const dc = dirColors[test.dir] || 'var(--ink-1)';
-  const dirLabel = {X:'Frontal',Y:'Latéral',Z:'Vertical'}[test.dir[0]];
-  const fp = test.fp ? `<div class="ii" style="grid-column:span 2"><div class="ilbl">Point de rupture</div><div class="ival fp">${test.fp}</div></div>` : '';
-  return `<div class="tr" data-id="${test.id}">
-    <div class="trhdr">
-      <div class="tid">${test.id}</div>
-      <div class="tdir" style="color:${dc}">${test.dir}</div>
-      <div class="tstat ${sc}">${sl}</div>
-      <div class="tname">${test.dir.replace('+','⁺').replace('−','⁻')} ${dirLabel}</div>
-      <div class="tdate">${test.date}</div>
-      <div class="tpeak">${test.peakG} g</div>
-      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+const rowHTML = t => `<details class="tr">
+  <summary class="trhdr">
+    <span class="tid">${t.id}</span>
+    <span class="tdir" style="color:${DIRC[t.dir]}">${t.dir}</span>
+    <span class="tstat ${t.status==='VALIDE'?'ok':'ko'}">${t.status==='VALIDE'?'VALIDÉ':'ÉCHEC'}</span>
+    <span class="tname">${t.dir.replace('+','⁺').replace('−','⁻')} ${dirLabel(t.dir)}</span>
+    <span class="tdate">${t.date}</span>
+    <span class="tpeak">${t.peakG} g</span>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+  </summary>
+  <div class="tbody">
+    <div class="infog">
+      <div class="ii"><div class="ilbl">N° Tir UTAC</div><div class="ival">${t.id}</div></div>
+      <div class="ii"><div class="ilbl">Référence</div><div class="ival">${t.ref}</div></div>
+      <div class="ii"><div class="ilbl">Acc_CFC60 max</div><div class="ival">${t.peakG} g</div></div>
+      <div class="ii"><div class="ilbl">Vmax sled</div><div class="ival">${t.vmax} km/h</div></div>
+      ${t.fp?`<div class="ii" style="grid-column:span 2"><div class="ilbl">Point de rupture</div><div class="ival fp">${t.fp}</div></div>`:''}
     </div>
-    <div class="tbody">
-      <div class="infog">
-        <div class="ii"><div class="ilbl">N° Tir UTAC</div><div class="ival">${test.id}</div></div>
-        <div class="ii"><div class="ilbl">Référence</div><div class="ival">${test.ref}</div></div>
-        <div class="ii"><div class="ilbl">Acc_CFC60 max</div><div class="ival">${test.peakG} g</div></div>
-        <div class="ii"><div class="ilbl">Vmax sled</div><div class="ival">${test.vmax} km/h</div></div>
-        ${fp}
-      </div>
-      <div class="obs"><div class="obsl">Observation UTAC</div><div class="obst">${test.obs}</div></div>
-      <div class="chartg">
-        <div class="cbox${ok?'':' fail-box'}">
-          <div class="clbl">Accélération · Corridor EN 1789+A2</div>
-          <div id="acc-${test.id}"></div>
-        </div>
-        <div class="cbox">
-          <div class="clbl">Vitesse · Vmax sled</div>
-          <div id="vel-${test.id}"></div>
-        </div>
-      </div>
+    <div class="obs"><div class="obsl">Observation UTAC</div><div class="obst">${t.obs}</div></div>
+    <div class="chartg">
+      <div class="cbox${t.status==='VALIDE'?'':' fail-box'}"><div class="clbl">Accélération · Corridor EN 1789+A2</div>${accChart(t)}</div>
+      <div class="cbox"><div class="clbl">Vitesse · Vmax sled</div>${velChart(t)}</div>
     </div>
+  </div>
+</details>`;
+
+document.getElementById('sessions').innerHTML = SESSIONS.map(s => {
+  const sts = s.ids.map(id => TESTS.find(t=>t.id===id));
+  const ok = sts.filter(t=>t.status==='VALIDE').length;
+  const ko = sts.filter(t=>t.status==='ECHEC').length;
+  return `<div class="sblock">
+    <div class="shdr">
+      <div class="sn">${s.num}</div>
+      <div><div class="stit">Session ${s.num}</div><div class="sdate">${s.date} · ${s.ref}</div></div>
+      <div class="ssum">${ok?`<span class="ok">${ok} VALIDÉ${ok>1?'S':''}</span>`:''}${ko?`<span class="ko">${ko} ÉCHEC${ko>1?'S':''}</span>`:''}</div>
+    </div>
+    ${sts.map(rowHTML).join('')}
   </div>`;
-}
+}).join('');
 
-// ─────────────────────────────────────────────────────────────
-// MODIFICATIONS (editorial layout)
-// ─────────────────────────────────────────────────────────────
-function buildMods() {
-  document.getElementById('mods').innerHTML = MODS.map(m=>`
-    <div class="mentry">
-      <div class="mchdr">
-        <div>
-          <div class="mcn">MODIFICATION N°${m.num} — Suite à ${m.after}</div>
-          <div class="mct">${m.title}</div>
-        </div>
-        <div class="mcd">${m.date}</div>
-      </div>
-      <div class="mcb">
-        <div>
-          <div class="msp">Problème identifié</div>
-          <div class="mpb">${m.prob}</div>
-        </div>
-        <div>
-          <div class="msp">Solutions apportées</div>
-          <ol class="msl">${m.sols.map(s=>`<li>${s}</li>`).join('')}</ol>
-        </div>
-      </div>
-      <div class="mcf">
-        <span>▸ Test suivant :</span>
-        ${m.next!=='PENDING' ? `<span class="mcf-next">${m.next}</span>` : `<span class="mcf-pend">Date UTAC pending — greenlight en attente</span>`}
-        <span style="margin-left:auto">${m.valid}</span>
-      </div>
-    </div>`).join('');
-}
-
-// ─────────────────────────────────────────────────────────────
-// TAB SWITCHING
-// ─────────────────────────────────────────────────────────────
-let testsBuilt=false, modsBuilt=false;
-function tab(id, btn) {
-  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
-  document.getElementById('tab-'+id).classList.add('on');
-  btn.classList.add('on');
-  if (id==='t' && !testsBuilt) { buildSessions(); testsBuilt=true; }
-  if (id==='j' && !modsBuilt)  { buildMods();    modsBuilt=true;  }
-}
-
-// ─────────────────────────────────────────────────────────────
-// INIT
-// ─────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  buildSystem();
-  renderTimeline();
+// Charts are inert markup until wired — one pass, dispatched by data-kind.
+document.querySelectorAll('svg.chart').forEach(svg => {
+  const t = TESTS.find(x=>x.id===svg.dataset.id);
+  if (svg.dataset.kind==='acc') wireHover(svg, t.acc, 'g', aY, 'g', -25, 180);
+  else wireHover(svg, t.vel, 'v', vY, 'km/h', 0, 142);
 });
+
+document.getElementById('mods').innerHTML = MODS.map(m => `<div class="mentry">
+  <div class="mchdr">
+    <div><div class="mcn">MODIFICATION N°${m.num} — Suite à ${m.after}</div><div class="mct">${m.title}</div></div>
+    <div class="mcd">${m.date}</div>
+  </div>
+  <div class="mcb">
+    <div><div class="msp">Problème identifié</div><div class="mpb">${m.prob}</div></div>
+    <div><div class="msp">Solutions apportées</div><ol class="msl">${m.sols.map(s=>`<li>${s}</li>`).join('')}</ol></div>
+  </div>
+  <div class="mcf">
+    <span>▸ Test suivant :</span>
+    ${m.next!=='PENDING'?`<span class="mcf-next">${m.next}</span>`:`<span class="mcf-pend">Date UTAC pending — greenlight en attente</span>`}
+    <span style="margin-left:auto">${m.valid}</span>
+  </div>
+</div>`).join('');
 </script>
 </body>
 </html>
